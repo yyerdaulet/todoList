@@ -1,0 +1,83 @@
+package com.example.demo.task;
+
+import com.example.demo.task.Dto.TaskRequest;
+import com.example.demo.task.Dto.TaskResponse;
+import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class TaskService {
+    private final TaskRepository repository;
+    private final TaskMapper mapper;
+    private final static Logger log = LoggerFactory.getLogger(TaskService.class);
+
+    public TaskService(TaskRepository repository, TaskMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    public TaskResponse getTaskById(Long id){
+        TaskEntity taskEntity = repository.
+                findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Not found task with id : " + id));
+        return mapper.toDomain(taskEntity);
+    }
+
+    public List<TaskResponse> getAllTasks(){
+        return repository.findAll().stream()
+                .map(mapper::toDomain).toList();
+    }
+
+    public List<TaskResponse> getActiveTasks(){
+        return repository.findActiveTasks(State.COMPLETED).stream()
+                .map(mapper::toDomain).toList();
+    }
+
+    public TaskResponse createTask(TaskRequest taskToCreate){
+        var taskToSave = new TaskEntity(
+                null,
+                taskToCreate.text(),
+                taskToCreate.startTime(),
+                taskToCreate.deadLine(),
+                State.NEW
+        );
+        repository.save(taskToSave);
+        return mapper.toDomain(taskToSave);
+    }
+
+    public TaskResponse updateTask(Long id, TaskRequest taskToUpdate){
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("Not found any task with such id");
+        }
+
+        var taskToSave = mapper.toEntity(id,taskToUpdate);
+        var updatedTask = repository.save(taskToSave);
+        return mapper.toDomain(updatedTask);
+    }
+
+    public TaskResponse completeTask(Long id){
+        var completedTask = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not found task with id: "+id));
+        completedTask.setState(State.COMPLETED);
+        repository.save(completedTask);
+        return mapper.toDomain(completedTask);
+    }
+
+    public void deleteTask(Long id){
+        if(!repository.existsById(id)){
+            throw new EntityNotFoundException("Not found task with id: " +id);
+        }
+        repository.deleteById(id);
+    }
+
+
+    public List<TaskResponse> getAllCompletedTasks() {
+        return repository.getCompleted(State.COMPLETED)
+                .stream()
+                .map(mapper::toDomain).toList();
+    }
+}
