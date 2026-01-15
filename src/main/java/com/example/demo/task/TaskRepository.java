@@ -19,6 +19,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity,Long> {
             @Param("state") State state
     );
 
+
     @Query("""
     select t from TaskEntity t
     where t.state != :state

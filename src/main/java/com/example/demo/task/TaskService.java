@@ -2,9 +2,11 @@ package com.example.demo.task;
 
 import com.example.demo.task.Dto.TaskRequest;
 import com.example.demo.task.Dto.TaskResponse;
+import com.example.demo.task.page.Page;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +29,11 @@ public class TaskService {
         return mapper.toDomain(taskEntity);
     }
 
-    public List<TaskResponse> getAllTasks(){
-        return repository.findAll().stream()
+    public List<TaskResponse> getAllTasks(Page page){
+        int pageSize = page.pageSize() != null ? page.pageSize() :3;
+        int pageNumber = page.pageNumber() != null ? page.pageNumber() :0;
+        var pageable = Pageable.ofSize(pageSize).withPage(pageNumber);
+        return repository.findAll(pageable).stream()
                 .map(mapper::toDomain).toList();
     }
 
