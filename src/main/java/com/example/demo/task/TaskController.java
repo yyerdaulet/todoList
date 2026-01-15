@@ -2,6 +2,7 @@ package com.example.demo.task;
 
 import com.example.demo.task.Dto.TaskRequest;
 import com.example.demo.task.Dto.TaskResponse;
+import com.example.demo.task.page.Page;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,14 @@ public class TaskController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<TaskResponse>> getAllTasks(){
-        log.info("Send all tasks");
-        return ResponseEntity.ok().body(taskService.getAllTasks());
+    public ResponseEntity<List<TaskResponse>> getAllTasks(
+            @RequestParam("pageSize") Integer pageSize,
+            @RequestParam("pageNumber") Integer pageNumber
+    ){
+        var page = new Page(
+                pageSize,
+                pageNumber);
+        return ResponseEntity.ok().body(taskService.getAllTasks(page));
     }
 
     @GetMapping("/active")
