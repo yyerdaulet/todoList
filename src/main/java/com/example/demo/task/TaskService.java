@@ -2,6 +2,7 @@ package com.example.demo.task;
 
 import com.example.demo.task.Dto.TaskRequest;
 import com.example.demo.task.Dto.TaskResponse;
+import com.example.demo.task.log.LogExecutionTime;
 import com.example.demo.task.page.Page;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class TaskService {
         this.mapper = mapper;
     }
 
+    @LogExecutionTime
     public TaskResponse getTaskById(Long id){
         TaskEntity taskEntity = repository.
                 findById(id).
@@ -29,6 +31,7 @@ public class TaskService {
         return mapper.toDomain(taskEntity);
     }
 
+    @LogExecutionTime
     public List<TaskResponse> getAllTasks(Page page){
         int pageSize = page.pageSize() != null ? page.pageSize() :3;
         int pageNumber = page.pageNumber() != null ? page.pageNumber() :0;
@@ -37,11 +40,13 @@ public class TaskService {
                 .map(mapper::toDomain).toList();
     }
 
+    @LogExecutionTime
     public List<TaskResponse> getActiveTasks(){
         return repository.findActiveTasks(State.COMPLETED).stream()
                 .map(mapper::toDomain).toList();
     }
 
+    @LogExecutionTime
     public TaskResponse createTask(TaskRequest taskToCreate){
         var taskToSave = new TaskEntity(
                 null,
@@ -54,6 +59,7 @@ public class TaskService {
         return mapper.toDomain(taskToSave);
     }
 
+    @LogExecutionTime
     public TaskResponse updateTask(Long id, TaskRequest taskToUpdate){
         if(!repository.existsById(id)){
             throw new EntityNotFoundException("Not found any task with such id");
@@ -64,6 +70,7 @@ public class TaskService {
         return mapper.toDomain(updatedTask);
     }
 
+    @LogExecutionTime
     public TaskResponse completeTask(Long id){
         var completedTask = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Not found task with id: "+id));
@@ -72,6 +79,7 @@ public class TaskService {
         return mapper.toDomain(completedTask);
     }
 
+    @LogExecutionTime
     public void deleteTask(Long id){
         if(!repository.existsById(id)){
             throw new EntityNotFoundException("Not found task with id: " +id);
@@ -79,7 +87,7 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-
+    @LogExecutionTime
     public List<TaskResponse> getAllCompletedTasks() {
         return repository.getCompleted(State.COMPLETED)
                 .stream()
