@@ -1,4 +1,4 @@
-package com.example.demo.task.page;
+package com.example.demo.jira.page;
 
 public record Page(
         Integer pageSize,

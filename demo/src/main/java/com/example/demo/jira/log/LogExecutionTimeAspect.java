@@ -1,4 +1,4 @@
-package com.example.demo.task.log;
+package com.example.demo.jira.log;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

@@ -1,4 +1,4 @@
-package com.example.demo.task.log;
+package com.example.demo.jira.log;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

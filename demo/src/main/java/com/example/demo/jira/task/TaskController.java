@@ -1,9 +1,9 @@
-package com.example.demo.task;
+package com.example.demo.jira.task;
 
-import com.example.demo.task.Dto.TaskRequest;
-import com.example.demo.task.Dto.TaskResponse;
-import com.example.demo.task.log.LogExecutionTime;
-import com.example.demo.task.page.Page;
+import com.example.demo.jira.task.Dto.TaskRequest;
+import com.example.demo.jira.task.Dto.TaskResponse;
+import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.page.Page;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

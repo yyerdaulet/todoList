@@ -1,4 +1,4 @@
-package com.example.demo.task.exception;
+package com.example.demo.jira.exception;
 
 import java.time.LocalDateTime;
 

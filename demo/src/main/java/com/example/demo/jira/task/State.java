@@ -1,4 +1,4 @@
-package com.example.demo.task;
+package com.example.demo.jira.task;
 
 public enum State {
     NEW,

@@ -1,4 +1,4 @@
-package com.example.demo.task.exception;
+package com.example.demo.jira.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;

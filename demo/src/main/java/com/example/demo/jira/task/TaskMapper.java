@@ -1,7 +1,7 @@
-package com.example.demo.task;
+package com.example.demo.jira.task;
 
-import com.example.demo.task.Dto.TaskRequest;
-import com.example.demo.task.Dto.TaskResponse;
+import com.example.demo.jira.task.Dto.TaskRequest;
+import com.example.demo.jira.task.Dto.TaskResponse;
 import org.springframework.stereotype.Component;
 
 @Component

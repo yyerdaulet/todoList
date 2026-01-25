@@ -1,4 +1,4 @@
-package com.example.demo.task;
+package com.example.demo.jira.task;
 
 
 import jakarta.persistence.*;

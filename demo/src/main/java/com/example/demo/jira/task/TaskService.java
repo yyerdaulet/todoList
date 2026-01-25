@@ -1,9 +1,9 @@
-package com.example.demo.task;
+package com.example.demo.jira.task;
 
-import com.example.demo.task.Dto.TaskRequest;
-import com.example.demo.task.Dto.TaskResponse;
-import com.example.demo.task.log.LogExecutionTime;
-import com.example.demo.task.page.Page;
+import com.example.demo.jira.task.Dto.TaskRequest;
+import com.example.demo.jira.task.Dto.TaskResponse;
+import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.page.Page;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
-    private final static Logger log = LoggerFactory.getLogger(TaskService.class);
 
     public TaskService(TaskRepository repository, TaskMapper mapper) {
         this.repository = repository;
@@ -61,7 +60,7 @@ public class TaskService {
 
     @LogExecutionTime
     public TaskResponse updateTask(Long id, TaskRequest taskToUpdate){
-        if(!repository.existsById(id)){
+        if(!repository.existsById(id)) {
             throw new EntityNotFoundException("Not found any task with such id");
         }
 

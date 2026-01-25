@@ -1,16 +1,11 @@
-package com.example.demo.task.Dto;
+package com.example.demo.jira.task.Dto;
 
-
-import com.example.demo.task.State;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 
 import java.time.LocalDate;
 
-public record TaskResponse(
-        @Null
-        Long id,
+public record TaskRequest (
         @NotNull
         String text,
         @FutureOrPresent
@@ -18,7 +13,6 @@ public record TaskResponse(
         LocalDate startTime,
         @NotNull
         @FutureOrPresent
-        LocalDate deadLine,
-        State state
+        LocalDate deadLine
 ){
 }
