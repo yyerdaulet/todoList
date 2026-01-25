@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping()
     @LogExecutionTime()
     public ResponseEntity<List<UserResponse>> getAllUsers(){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.getAllUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
@@ -33,7 +33,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(
             @PathVariable("id") Long id
     ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.getUserById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
     @PostMapping()
@@ -50,7 +50,7 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserRequest userToUpdate
     ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id,userToUpdate));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(id,userToUpdate));
     }
 
     @DeleteMapping("/id")

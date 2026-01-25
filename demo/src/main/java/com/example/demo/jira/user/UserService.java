@@ -5,10 +5,11 @@ import com.example.demo.jira.user.Dto.UserRequest;
 import com.example.demo.jira.user.Dto.UserResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
