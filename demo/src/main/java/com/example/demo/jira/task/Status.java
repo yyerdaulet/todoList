@@ -1,6 +1,6 @@
 package com.example.demo.jira.task;
 
-public enum State {
+public enum Status {
     NEW,
     CHANGED,
     COMPLETED,

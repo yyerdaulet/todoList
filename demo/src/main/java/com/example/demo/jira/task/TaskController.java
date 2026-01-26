@@ -50,18 +50,6 @@ public class TaskController {
     }
 
     @LogExecutionTime
-    @GetMapping("/active")
-    public ResponseEntity<List<TaskResponse>> getActiveTasks(){
-        return ResponseEntity.ok().body(taskService.getActiveTasks());
-    }
-
-    @LogExecutionTime
-    @GetMapping("/completed")
-    public ResponseEntity<List<TaskResponse>> getAllCompletedTasks(){
-        return ResponseEntity.ok().body(taskService.getAllCompletedTasks());
-    }
-
-    @LogExecutionTime
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(
             @RequestBody @Valid TaskRequest taskToCreate
@@ -80,13 +68,6 @@ public class TaskController {
         return ResponseEntity.ok().body(taskService.updateTask(id,taskToUpdate));
     }
 
-    @LogExecutionTime
-    @PatchMapping("/{id}/complete")
-    public ResponseEntity<TaskResponse> completeTask(
-            @PathVariable Long id
-    ){
-           return ResponseEntity.status(HttpStatus.OK).body(taskService.completeTask(id));
-    }
 
     @LogExecutionTime
     @DeleteMapping("/{id}")

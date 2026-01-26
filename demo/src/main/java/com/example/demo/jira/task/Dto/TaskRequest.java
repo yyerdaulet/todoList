@@ -1,18 +1,26 @@
 package com.example.demo.jira.task.Dto;
 
-import jakarta.validation.constraints.FutureOrPresent;
+import com.example.demo.jira.task.Status;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
 
-public record TaskRequest (
+
+import java.util.List;
+
+public record TaskRequest(
         @NotNull
-        String text,
-        @FutureOrPresent
+        String title,
+
         @NotNull
-        LocalDate startTime,
+        @Enumerated(EnumType.STRING)
+        Status status,
+
         @NotNull
-        @FutureOrPresent
-        LocalDate deadLine
+        String assignee,
+
+        @NotNull
+        List<String> comments
 ){
 }

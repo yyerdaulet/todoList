@@ -11,21 +11,21 @@ public interface TaskRepository extends JpaRepository<TaskEntity,Long> {
     @Query(
             """
     select t from TaskEntity t
-        where t.state = :state
+        where t.status = :status
         order by t.startTime
     """
     )
     List<TaskEntity> getCompleted(
-            @Param("state") State state
+            @Param("status") Status status
     );
 
 
     @Query("""
     select t from TaskEntity t
-    where t.state != :state
+    where t.status != :status
     order by t.startTime
 """)
     List<TaskEntity> findActiveTasks(
-            @Param("state") State state
+            @Param("status") Status status
     );
 }

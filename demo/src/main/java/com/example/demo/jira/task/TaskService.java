@@ -5,8 +5,6 @@ import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.log.LogExecutionTime;
 import com.example.demo.jira.page.Page;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -40,19 +38,13 @@ public class TaskService {
     }
 
     @LogExecutionTime
-    public List<TaskResponse> getActiveTasks(){
-        return repository.findActiveTasks(State.COMPLETED).stream()
-                .map(mapper::toDomain).toList();
-    }
-
-    @LogExecutionTime
     public TaskResponse createTask(TaskRequest taskToCreate){
         var taskToSave = new TaskEntity(
                 null,
-                taskToCreate.text(),
-                taskToCreate.startTime(),
-                taskToCreate.deadLine(),
-                State.NEW
+                taskToCreate.title(),
+                taskToCreate.status(),
+                taskToCreate.assignee(),
+                taskToCreate.comments()
         );
         repository.save(taskToSave);
         return mapper.toDomain(taskToSave);
@@ -69,14 +61,6 @@ public class TaskService {
         return mapper.toDomain(updatedTask);
     }
 
-    @LogExecutionTime
-    public TaskResponse completeTask(Long id){
-        var completedTask = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Not found task with id: "+id));
-        completedTask.setState(State.COMPLETED);
-        repository.save(completedTask);
-        return mapper.toDomain(completedTask);
-    }
 
     @LogExecutionTime
     public void deleteTask(Long id){
@@ -86,10 +70,5 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-    @LogExecutionTime
-    public List<TaskResponse> getAllCompletedTasks() {
-        return repository.getCompleted(State.COMPLETED)
-                .stream()
-                .map(mapper::toDomain).toList();
-    }
+
 }
