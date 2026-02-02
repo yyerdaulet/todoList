@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Null;
 import java.util.List;
 
 public record UserCreateResponse (
-        @Null
         Long id,
 
         @NotNull

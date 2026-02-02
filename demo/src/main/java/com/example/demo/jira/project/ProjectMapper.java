@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ProjectMapper {
     public ProjectResponse toDomain(ProjectEntity entity){
         return new ProjectResponse(
-                null,
+                entity.getId(),
                 entity.getName(),
                 entity.getOwner().getName(),
                 entity.getTasks().stream().map(TaskEntity::getTitle).toList()

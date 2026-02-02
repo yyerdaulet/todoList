@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     public UserResponse toDomain(UserEntity user){
         return new UserResponse(
-                null,
+                user.getId(),
                 user.getName(),
                 user.getProjects().stream().map(ProjectEntity::getName).toList()
         );
@@ -18,7 +18,7 @@ public class UserMapper {
 
     public UserCreateResponse toUserCreateResponse(UserEntity user){
         return new @Valid UserCreateResponse(
-                null,
+                user.getId(),
                 user.getName(),
                 null
         );

@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -18,9 +19,11 @@ public class CommentService {
     private final CommentMapper mapper;
     private final TaskRepository taskRepository;
 
-    public List<CommentResponse> getAllComments() {
+    public List<CommentResponse> getAllComments(
+             Long task_id
+    ) {
         return repository.
-                findAll().
+                findByTaskId(task_id).
                 stream().
                 map(mapper::toDomain).toList();
     }

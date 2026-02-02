@@ -10,7 +10,7 @@ public class CommentMapper {
 
     public CommentResponse toDomain(CommentEntity commentEntity) {
         return new CommentResponse(
-                null,
+                commentEntity.getId(),
                 commentEntity.getText(),
                 commentEntity.getTask().getTitle()
         );

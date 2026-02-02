@@ -40,13 +40,9 @@ public class TaskController {
     @LogExecutionTime
     @GetMapping()
     public ResponseEntity<List<TaskResponse>> getAllTasks(
-            @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("pageNumber") Integer pageNumber
+            @PathVariable("project_id") Long project_id
     ){
-        var page = new Page(
-                pageSize,
-                pageNumber);
-        return ResponseEntity.ok().body(taskService.getAllTasks(page));
+        return ResponseEntity.ok().body(taskService.getAllTasks(project_id));
     }
 
     @LogExecutionTime

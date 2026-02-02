@@ -20,8 +20,10 @@ public class CommentController {
 
     @GetMapping()
     @LogExecutionTime()
-    public ResponseEntity<List<CommentResponse>> getAllComments(){
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllComments());
+    public ResponseEntity<List<CommentResponse>> getAllComments(
+            @PathVariable("task_id") Long task_id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllComments(task_id));
     }
 
     @GetMapping("/{id}")

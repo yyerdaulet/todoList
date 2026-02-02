@@ -30,11 +30,8 @@ public class TaskService {
     }
 
     @LogExecutionTime
-    public List<TaskResponse> getAllTasks(Page page){
-        int pageSize = page.pageSize() != null ? page.pageSize() :3;
-        int pageNumber = page.pageNumber() != null ? page.pageNumber() :0;
-        var pageable = Pageable.ofSize(pageSize).withPage(pageNumber);
-        return repository.findAll(pageable).stream()
+    public List<TaskResponse> getAllTasks(Long project_id){
+        return repository.findByProjectId(project_id).stream()
                 .map(mapper::toDomain).toList();
     }
 

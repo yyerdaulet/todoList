@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Null;
 
 public record CommentResponse(
         @Id
-        @Null
         Long id,
 
         @NotNull
