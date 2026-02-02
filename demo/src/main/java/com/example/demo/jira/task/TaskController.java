@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("users/{user_id}/projects/{project_id}/tasks")
 public class TaskController {
     private final TaskService taskService;
 
@@ -52,10 +52,12 @@ public class TaskController {
     @LogExecutionTime
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(
-            @RequestBody @Valid TaskRequest taskToCreate
+            @RequestBody @Valid TaskRequest taskToCreate,
+            @PathVariable("user_id") Long user_id,
+            @PathVariable("project_id") Long project_id
     ){
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                taskService.createTask(taskToCreate)
+                taskService.createTask(user_id, project_id, taskToCreate)
         );
     }
 

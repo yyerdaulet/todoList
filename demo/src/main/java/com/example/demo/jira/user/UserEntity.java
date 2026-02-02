@@ -1,9 +1,20 @@
 package com.example.demo.jira.user;
 
+import com.example.demo.jira.project.ProjectEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity()
 @Table(name="Users")
 public class UserEntity {
@@ -15,36 +26,9 @@ public class UserEntity {
     @Column(name="name")
     private String name;
 
-    @Column(name="projects")
-    private List<String> projects;
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.REMOVE)
+    // @JoinColumn(name="projects_id")
+    @JsonManagedReference
+    private List<ProjectEntity> projects = new ArrayList<>();
 
-    public UserEntity(Long id, String name, List<String> projects) {
-        this.id = id;
-        this.name = name;
-        this.projects = projects;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<String> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<String> projects) {
-        this.projects = projects;
-    }
 }

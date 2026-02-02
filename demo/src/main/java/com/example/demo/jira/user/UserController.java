@@ -1,6 +1,7 @@
 package com.example.demo.jira.user;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.user.Dto.UserCreateResponse;
 import com.example.demo.jira.user.Dto.UserRequest;
 import com.example.demo.jira.user.Dto.UserResponse;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class UserController {
 
     @PostMapping()
     @LogExecutionTime()
-    public ResponseEntity<UserResponse> createUser(
+    public ResponseEntity<UserCreateResponse> createUser(
             @RequestBody @Valid UserRequest userToCreate
             ){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userToCreate));
@@ -53,7 +54,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(id,userToUpdate));
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     @LogExecutionTime()
     public ResponseEntity<Void> deleteUser(
             @PathVariable("id") Long id

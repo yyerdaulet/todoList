@@ -12,16 +12,9 @@ public class CommentMapper {
         return new CommentResponse(
                 null,
                 commentEntity.getText(),
-                commentEntity.getAuthor()
+                commentEntity.getTask().getTitle()
         );
     }
 
-    public CommentEntity toEntity(Long id, CommentRequest request){
-        return new CommentEntity(
-                id,
-                request.text(),
-                request.author()
-        );
-    }
 
 }

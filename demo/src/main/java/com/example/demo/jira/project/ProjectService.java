@@ -1,10 +1,11 @@
 package com.example.demo.jira.project;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.project.dto.ProjectCreateResponse;
 import com.example.demo.jira.project.dto.ProjectRequest;
 import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +14,18 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository repository;
     private final ProjectMapper mapper;
+    private final UserRepository userRepository;
 
-    public ProjectService(ProjectRepository repository, ProjectMapper mapper) {
+    public ProjectService(ProjectRepository repository, ProjectMapper mapper,UserRepository userRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.userRepository = userRepository;
     }
 
     @LogExecutionTime()
-    public List<ProjectResponse> getAllProjects() {
+    public List<ProjectResponse> getAllProjects(Long user_id) {
         return repository.
-                findAll().
+                findByUserId(user_id).
                 stream().
                 map(mapper::toDomain).toList();
     }
@@ -31,37 +34,41 @@ public class ProjectService {
     public ProjectResponse getProjectById(Long id) {
         var project =  repository.findById(id)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("item not found")
+                        () -> new EntityNotFoundException("Project not found")
         );
         return mapper.toDomain(project);
     }
 
     @LogExecutionTime()
-    public ProjectResponse createProject(ProjectRequest request) {
+    public ProjectCreateResponse createProject(Long user_id, ProjectRequest request) {
+        var userEntity = userRepository.findById(user_id).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+
         var newProject = new ProjectEntity(
                 null,
                 request.name(),
-                request.owner(),
-                request.tasks()
+                userEntity,
+                null
         );
         repository.save(newProject);
-        return mapper.toDomain(newProject);
+        return mapper.toProjectCreateResponse(newProject);
     }
 
     @LogExecutionTime()
     public ProjectResponse updateProject(Long id, ProjectRequest request) {
-        if(!repository.existsById(id)){
-            throw new EntityNotFoundException("item not found");
-        }
-        var projectToSave = mapper.toEntity(id,request);
-        repository.save(projectToSave);
-        return mapper.toDomain(projectToSave);
+        var project = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Project not found")
+        );
+        project.setName(request.name());
+        repository.save(project);
+        return mapper.toDomain(project);
     }
 
     @LogExecutionTime()
     public void deleteProject(Long id) {
         if(!repository.existsById(id)){
-            throw new EntityNotFoundException("item not found");
+            throw new EntityNotFoundException("Project not found");
         }
         repository.deleteById(id);
     }

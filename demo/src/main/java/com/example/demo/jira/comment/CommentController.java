@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/comments")
+@RequestMapping("users/{user_id}/projects/{project_id}/tasks/{task_id}/comments")
 @RestController
 public class CommentController {
     private final CommentService service;
@@ -35,9 +35,10 @@ public class CommentController {
     @PostMapping()
     @LogExecutionTime()
     public ResponseEntity<CommentResponse> createComment(
-            @RequestBody CommentRequest request
+            @RequestBody CommentRequest request,
+            @PathVariable("task_id") Long task_id
             ){
-        return ResponseEntity.status(HttpStatus.OK).body(service.createComment(request));
+        return ResponseEntity.status(HttpStatus.OK).body(service.createComment(task_id,request));
     }
 
     @PutMapping("/{id}")

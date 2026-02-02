@@ -4,10 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record CommentRequest (
         @NotNull
-        String text,
-
-        @NotNull
-        String author
+        String text
 ){
 
 }

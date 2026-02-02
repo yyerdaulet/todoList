@@ -11,16 +11,6 @@ import java.util.List;
 
 public record TaskRequest(
         @NotNull
-        String title,
-
-        @NotNull
-        @Enumerated(EnumType.STRING)
-        Status status,
-
-        @NotNull
-        String assignee,
-
-        @NotNull
-        List<String> comments
+        String title
 ){
 }

@@ -1,26 +1,30 @@
 package com.example.demo.jira.project;
 
+import com.example.demo.jira.project.dto.ProjectCreateResponse;
 import com.example.demo.jira.project.dto.ProjectRequest;
 import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.task.TaskEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectMapper {
     public ProjectResponse toDomain(ProjectEntity entity){
         return new ProjectResponse(
-                entity.getId(),
+                null,
                 entity.getName(),
-                entity.getOwner(),
-                entity.getTasks()
+                entity.getOwner().getName(),
+                entity.getTasks().stream().map(TaskEntity::getTitle).toList()
         );
     }
 
-    public ProjectEntity toEntity(Long id, ProjectRequest request) {
-        return new ProjectEntity(
-                id,
-                request.name(),
-                request.owner(),
-                request.tasks()
+    public ProjectCreateResponse toProjectCreateResponse(ProjectEntity entity){
+        return new ProjectCreateResponse(
+                entity.getId(),
+                entity.getName(),
+                entity.getOwner().getName()
         );
     }
+
+
+
 }

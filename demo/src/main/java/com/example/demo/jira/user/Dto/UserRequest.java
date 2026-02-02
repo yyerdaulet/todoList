@@ -7,9 +7,6 @@ import java.util.List;
 public record UserRequest(
 
         @NotNull
-        String name,
-
-        @NotNull
-        List<String> projects
+        String name
 ){
 }

@@ -1,6 +1,7 @@
 package com.example.demo.jira.project;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.project.dto.ProjectCreateResponse;
 import com.example.demo.jira.project.dto.ProjectRequest;
 import com.example.demo.jira.project.dto.ProjectResponse;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/projects")
+@RequestMapping("users/{user_id}/projects")
 @RestController()
 public class ProjectController {
     private final ProjectService projectService;
@@ -18,26 +19,29 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping()
+    @GetMapping("")
     @LogExecutionTime()
-    public ResponseEntity<List<ProjectResponse>> getAllProjects(){
-        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAllProjects());
+    public ResponseEntity<List<ProjectResponse>> getAllProjects(
+            @PathVariable("user_id") Long user_id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAllProjects(user_id));
     }
 
     @GetMapping("/{id}")
     @LogExecutionTime()
     public ResponseEntity<ProjectResponse> getProjectById(
-            @PathVariable Long id
+            @PathVariable("id") Long id
     ){
         return ResponseEntity.status(HttpStatus.OK).body(projectService.getProjectById(id));
     }
 
     @PostMapping()
     @LogExecutionTime()
-    public ResponseEntity<ProjectResponse> createProject(
-            @RequestBody ProjectRequest request
+    public ResponseEntity<ProjectCreateResponse> createProject(
+            @RequestBody ProjectRequest request,
+            @PathVariable("user_id") Long user_id
             ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(user_id,request));
     }
 
     @PutMapping("/{id}")

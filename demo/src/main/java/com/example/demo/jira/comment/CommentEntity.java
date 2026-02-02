@@ -1,9 +1,21 @@
 package com.example.demo.jira.comment;
 
+import com.example.demo.jira.task.TaskEntity;
+import com.example.demo.jira.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table(name="Comments")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class CommentEntity {
     @Id
     @Column(name="id")
@@ -15,36 +27,9 @@ public class CommentEntity {
     String text;
 
     @NotNull
-    @Column(name="author")
-    String author;
+    @JsonBackReference
+    @ManyToOne()
+    TaskEntity task;
 
-    public CommentEntity(Long id, String text, String author) {
-        this.id = id;
-        this.text = text;
-        this.author = author;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 }

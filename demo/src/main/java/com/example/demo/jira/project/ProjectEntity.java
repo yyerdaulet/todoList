@@ -1,9 +1,24 @@
 package com.example.demo.jira.project;
 
+import com.example.demo.jira.task.TaskEntity;
+import com.example.demo.jira.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 import java.util.List;
 
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name="Projects")
 public class ProjectEntity {
     @Id
@@ -14,48 +29,16 @@ public class ProjectEntity {
     @Column(name="name")
     private String name;
 
-    @Column(name="owner")
-    private String owner;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonBackReference
+    private UserEntity owner;
 
-    @Column(name="tasks")
-    private List<String> tasks;
 
-    public ProjectEntity(Long id, String name, String owner, List<String> tasks) {
-        this.id = id;
-        this.name = name;
-        this.owner = owner;
-        this.tasks = tasks;
-    }
+    @OneToMany(mappedBy = "project",cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    // @JoinColumn(name="tasks")
+    private List<TaskEntity> tasks;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public List<String> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<String> tasks) {
-        this.tasks = tasks;
-    }
 }

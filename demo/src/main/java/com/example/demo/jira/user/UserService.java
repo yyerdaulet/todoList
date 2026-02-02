@@ -1,25 +1,28 @@
 package com.example.demo.jira.user;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.project.ProjectService;
+import com.example.demo.jira.user.Dto.UserCreateResponse;
 import com.example.demo.jira.user.Dto.UserRequest;
 import com.example.demo.jira.user.Dto.UserResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
+
+@AllArgsConstructor
 @Service
 public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
 
-    public UserService(UserRepository repository, UserMapper mapper) {
-        this.mapper = mapper;
-        this.repository = repository;
-    }
-
-    @LogExecutionTime()
+    @GetMapping
     public List<UserResponse> getAllUsers() {
         return repository.findAll().stream().map(mapper::toDomain).toList();
     }
@@ -28,36 +31,38 @@ public class UserService {
     public UserResponse getUserById(Long id) {
         UserEntity user = repository
                 .findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("not found item"));
+                .orElseThrow( () -> new EntityNotFoundException("User Entity found item"));
         return mapper.toDomain(user);
     }
 
     @LogExecutionTime()
-    public UserResponse createUser(@Valid UserRequest userToCreate) {
+    public UserCreateResponse createUser(@Valid UserRequest userToCreate) {
         var newUser = new UserEntity(
                 null,
                 userToCreate.name(),
-                userToCreate.projects()
+                null
+
         );
         repository.save(newUser);
-        return mapper.toDomain(newUser);
+        return mapper.toUserCreateResponse(newUser);
     }
 
     @LogExecutionTime()
+    @PutMapping
     public UserResponse updateUser(Long id,
             @Valid UserRequest userToUpdate) {
-            if(!repository.existsById(id)){
-                throw new EntityNotFoundException("Not found item");
-            }
-            var userToSave = mapper.toEntity(id,userToUpdate);
-            var updatedTask = repository.save(userToSave);
-            return mapper.toDomain(updatedTask);
+            var user = repository.findById(id).orElseThrow(
+                    () -> new EntityNotFoundException("User not found")
+            );
+            user.setName(userToUpdate.name());
+            repository.save(user);
+            return mapper.toDomain(user);
     }
 
     @LogExecutionTime()
     public void deleteUser(Long id) {
         if(!repository.existsById(id)){
-            throw new EntityNotFoundException("Not found item");
+            throw new EntityNotFoundException("User found item");
         }
         repository.deleteById(id);
 

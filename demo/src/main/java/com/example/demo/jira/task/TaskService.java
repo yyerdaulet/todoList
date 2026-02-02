@@ -1,24 +1,25 @@
 package com.example.demo.jira.task;
 
+import com.example.demo.jira.project.ProjectRepository;
 import com.example.demo.jira.task.Dto.TaskRequest;
 import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.log.LogExecutionTime;
 import com.example.demo.jira.page.Page;
+import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
-
-    public TaskService(TaskRepository repository, TaskMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
     @LogExecutionTime
     public TaskResponse getTaskById(Long id){
@@ -38,13 +39,20 @@ public class TaskService {
     }
 
     @LogExecutionTime
-    public TaskResponse createTask(TaskRequest taskToCreate){
+    public TaskResponse createTask(Long user_id,Long project_id,TaskRequest taskToCreate){
+        var user = userRepository.findById(user_id).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+        var project = projectRepository.findById(project_id).orElseThrow(
+                () -> new EntityNotFoundException("Project not found")
+        );
         var taskToSave = new TaskEntity(
                 null,
                 taskToCreate.title(),
-                taskToCreate.status(),
-                taskToCreate.assignee(),
-                taskToCreate.comments()
+                Status.NEW,
+                user,
+                project,
+                null
         );
         repository.save(taskToSave);
         return mapper.toDomain(taskToSave);
@@ -56,9 +64,13 @@ public class TaskService {
             throw new EntityNotFoundException("Not found any task with such id");
         }
 
-        var taskToSave = mapper.toEntity(id,taskToUpdate);
-        var updatedTask = repository.save(taskToSave);
-        return mapper.toDomain(updatedTask);
+        var task = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Task not found")
+        );
+        task.setTitle(taskToUpdate.title());
+        task.setStatus(Status.CHANGED);
+        repository.save(task);
+        return mapper.toDomain(task);
     }
 
 

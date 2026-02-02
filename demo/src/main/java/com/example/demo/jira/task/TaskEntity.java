@@ -1,11 +1,24 @@
 package com.example.demo.jira.task;
 
 
+import com.example.demo.jira.comment.CommentEntity;
+import com.example.demo.jira.project.ProjectEntity;
+import com.example.demo.jira.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="Tasks")
 @Entity
 public class TaskEntity {
@@ -21,57 +34,20 @@ public class TaskEntity {
     @Column(name="status")
     private Status status;
 
-    @Column(name="assignee")
-    private String assignee;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonBackReference
+    private UserEntity manager;
 
-    @Column(name="comments")
-    private List<String> comments;
+    @ManyToOne()
+    @JoinColumn(name="project_id")
+    @JsonBackReference
+    private ProjectEntity project;
 
-    public TaskEntity(Long id, String title, Status status, String assignee, List<String> comments) {
-        this.id = id;
-        this.title = title;
-        this.status = status;
-        this.assignee = assignee;
-        this.comments = comments;
-    }
+    @OneToMany(mappedBy = "task",cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+     // @JoinColumn(name="comment_id")
+    private List<CommentEntity> comments;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(String assignee) {
-        this.assignee = assignee;
-    }
-
-    public List<String> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<String> comments) {
-        this.comments = comments;
-    }
 }

@@ -11,19 +11,10 @@ public class TaskMapper {
                 task.getId(),
                 task.getTitle(),
                 task.getStatus(),
-                task.getAssignee(),
+                task.getManager().getName(),
                 task.getComments()
         );
     }
 
-    public TaskEntity toEntity(Long id, TaskRequest task){
-        return new TaskEntity(
-                id,
-                task.title(),
-                task.status(),
-                task.assignee(),
-                task.comments()
-        );
-    }
 
 }
