@@ -5,6 +5,7 @@ import com.example.demo.jira.comment.CommentEntity;
 import com.example.demo.jira.project.ProjectEntity;
 import com.example.demo.jira.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,12 +37,12 @@ public class TaskEntity {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    @JsonBackReference
+    @JsonIgnore
     private UserEntity manager;
 
     @ManyToOne()
     @JoinColumn(name="project_id")
-    @JsonBackReference
+    @JsonIgnore
     private ProjectEntity project;
 
     @OneToMany(mappedBy = "task",cascade = CascadeType.REMOVE)

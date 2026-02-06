@@ -1,69 +1,37 @@
 package com.example.demo.jira.controllers;
 
-
 import com.example.demo.jira.TaskManagerApplication;
-import com.example.demo.jira.project.dto.ProjectResponse;
 import com.example.demo.jira.user.Dto.UserResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.formatter.qual.UnknownFormat;
+import com.example.demo.utils.TestConfig;
+import com.example.demo.utils.UserHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.context.annotation.Import;
 
 @SpringBootTest(classes = TaskManagerApplication.class)
+@Import(TestConfig.class)
 @AutoConfigureMockMvc
 class UserControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private UserHelper helper;
+
 
     @Test
     void userLifeCycle() throws Exception {
 
-        String requestJson = """
-			{
-				"name":"Yerdaulet"
-			}
-			""";
+        UserResponse createdUser = helper.createUser();  // post request
 
-        MvcResult creation = mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("Yerdaulet"))
-                .andReturn();
-
-        String respond = creation.getResponse().getContentAsString();
-
-        UserResponse createdUser = mapper.readValue(respond, UserResponse.class);
         Long userId = createdUser.id();
 
-        mockMvc.perform(get("/users/" + userId))
-                .andExpect(status().isOk());
+        helper.getUser(userId);  // get request
 
-        String updateJson = """
-				{
-				"name":"Bakyt"
-					}			\t
-			\t""";
+        helper.updateUser(userId); // put request
 
-        mockMvc.perform(put("/users/"+userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateJson)
-                ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Bakyt"));
+        helper.deleteUser(userId);  // delete request
 
-        mockMvc.perform(delete("/users/"+userId))
-                .andExpect(status().isNoContent());
     }
 
 }

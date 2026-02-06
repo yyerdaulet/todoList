@@ -1,10 +1,12 @@
 package com.example.demo.jira.controllers;
 
 
-
+import com.example.demo.jira.TaskManagerApplication;
 import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.user.Dto.UserResponse;
 import com.example.demo.utils.ProjectHelper;
+import com.example.demo.utils.TaskHelper;
 import com.example.demo.utils.TestConfig;
 import com.example.demo.utils.UserHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,19 +17,23 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
+@SpringBootTest(classes = TaskManagerApplication.class)
 @AutoConfigureMockMvc
 @Import(TestConfig.class)
-class ProjectControllerTest {
+class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private UserHelper userHelper;
@@ -35,10 +41,13 @@ class ProjectControllerTest {
     @Autowired
     private ProjectHelper projectHelper;
 
+    @Autowired
+    private TaskHelper taskHelper;
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void projectLifeCycle() throws Exception {
-
+    void taskLifeCycle() throws Exception {
         UserResponse createdUser = userHelper.createUser();  // post request(User)
 
         Long userId = createdUser.id();
@@ -47,13 +56,18 @@ class ProjectControllerTest {
 
         Long projectId = createdProject.id();
 
-        projectHelper.getProject(createdUser,createdProject);   // get request(Project)
+        TaskResponse createdTask = taskHelper.createTask(userId,projectId);  // post request(Task)
 
-        projectHelper.updateProject(userId,projectId);   // put request(Project)
+        Long taskId = createdTask.id();
 
-        projectHelper.deleteProject(userId,projectId);  // delete request(Project)
+        taskHelper.getTask(userId,projectId,taskId); // get request(Task)
 
-        userHelper.deleteUser(userId);   // delete request(User)
+        taskHelper.updateTask(userId,projectId,taskId); // put request(Task)
+
+        taskHelper.deleteTask(userId,projectId,taskId); // delete request(Task)
+
+
     }
+
 
 }
