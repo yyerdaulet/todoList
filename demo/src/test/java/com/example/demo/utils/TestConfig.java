@@ -21,4 +21,7 @@ public class TestConfig {
     public TaskHelper taskHelper(){
         return new TaskHelper();
     }
+
+    @Bean
+    public CommentHelper commentHelper() {return new CommentHelper();}
 }

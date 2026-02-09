@@ -1,37 +1,22 @@
 package com.example.demo.jira.controllers;
-
-
 import com.example.demo.jira.TaskManagerApplication;
+import com.example.demo.jira.comment.dto.CommentResponse;
 import com.example.demo.jira.project.dto.ProjectResponse;
 import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.user.Dto.UserResponse;
-import com.example.demo.utils.ProjectHelper;
-import com.example.demo.utils.TaskHelper;
-import com.example.demo.utils.TestConfig;
-import com.example.demo.utils.UserHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.utils.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = TaskManagerApplication.class)
 @AutoConfigureMockMvc
 @Import(TestConfig.class)
-class TaskControllerTest {
+class CommentControllerTest {
+
     @Autowired
     private UserHelper userHelper;
 
@@ -41,8 +26,11 @@ class TaskControllerTest {
     @Autowired
     private TaskHelper taskHelper;
 
+    @Autowired
+    private CommentHelper commentHelper;
+
     @Test
-    void taskLifeCycle() throws Exception {
+    void commentLifeCycle() throws Exception {
         UserResponse createdUser = userHelper.createUser();  // post request(User)
 
         Long userId = createdUser.id();
@@ -55,12 +43,15 @@ class TaskControllerTest {
 
         Long taskId = createdTask.id();
 
-        taskHelper.getTask(userId,projectId,taskId); // get request(Task)
+        CommentResponse createdComment = commentHelper.createComment(userId,projectId,taskId);  // post request(Comment)
 
-        taskHelper.updateTask(userId,projectId,taskId); // put request(Task)
+        Long commentId = createdComment.id();
 
-        taskHelper.deleteTask(userId,projectId,taskId); // delete request(Task)
+        commentHelper.getComment(userId,projectId,taskId,commentId);  // get request(Comment)
 
+        commentHelper.updateComment(userId,projectId,taskId,commentId); // post request(Comment)
+
+        commentHelper.deleteTask(userId,projectId,taskId,commentId); // delete request(Comment)
 
     }
 

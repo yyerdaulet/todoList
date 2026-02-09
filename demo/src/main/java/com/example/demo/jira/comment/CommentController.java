@@ -40,7 +40,7 @@ public class CommentController {
             @RequestBody CommentRequest request,
             @PathVariable("task_id") Long task_id
             ){
-        return ResponseEntity.status(HttpStatus.OK).body(service.createComment(task_id,request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createComment(task_id,request));
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,7 @@ public class CommentController {
             @PathVariable Long id
     ){
         service.deleteComment(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

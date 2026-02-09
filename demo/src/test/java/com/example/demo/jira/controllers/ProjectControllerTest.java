@@ -25,11 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(TestConfig.class)
 class ProjectControllerTest {
     @Autowired
-    private MockMvc mockMvc;
-
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    @Autowired
     private UserHelper userHelper;
 
     @Autowired
