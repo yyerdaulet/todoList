@@ -7,6 +7,7 @@ import com.example.demo.jira.project.dto.ProjectResponse;
 import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class ProjectService {
         return mapper.toDomain(project);
     }
 
+    @Transactional
     @LogExecutionTime()
     public ProjectCreateResponse createProject(Long user_id, ProjectRequest request) {
         var userEntity = userRepository.findById(user_id).orElseThrow(
@@ -55,6 +57,7 @@ public class ProjectService {
         return mapper.toProjectCreateResponse(newProject);
     }
 
+    @Transactional
     @LogExecutionTime()
     public ProjectResponse updateProject(Long id, ProjectRequest request) {
         var project = repository.findById(id).orElseThrow(
@@ -65,6 +68,7 @@ public class ProjectService {
         return mapper.toDomain(project);
     }
 
+    @Transactional
     @LogExecutionTime()
     public void deleteProject(Long id) {
         if(!repository.existsById(id)){

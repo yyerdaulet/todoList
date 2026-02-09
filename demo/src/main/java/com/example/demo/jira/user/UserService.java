@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
 
+    @LogExecutionTime
     @GetMapping
     public List<UserResponse> getAllUsers() {
         return repository.findAll().stream().map(mapper::toDomain).toList();
@@ -35,6 +37,7 @@ public class UserService {
         return mapper.toDomain(user);
     }
 
+    @Transactional
     @LogExecutionTime()
     public UserCreateResponse createUser(@Valid UserRequest userToCreate) {
         var newUser = new UserEntity(
@@ -47,6 +50,7 @@ public class UserService {
         return mapper.toUserCreateResponse(newUser);
     }
 
+    @Transactional
     @LogExecutionTime()
     @PutMapping
     public UserResponse updateUser(Long id,
@@ -59,6 +63,7 @@ public class UserService {
             return mapper.toDomain(user);
     }
 
+    @Transactional
     @LogExecutionTime()
     public void deleteUser(Long id) {
         if(!repository.existsById(id)){

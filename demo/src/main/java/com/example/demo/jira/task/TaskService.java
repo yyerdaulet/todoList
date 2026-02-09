@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class TaskService {
                 .map(mapper::toDomain).toList();
     }
 
+    @Transactional
     @LogExecutionTime
     public TaskResponse createTask(Long user_id,Long project_id,TaskRequest taskToCreate){
         var user = userRepository.findById(user_id).orElseThrow(
@@ -55,6 +57,7 @@ public class TaskService {
         return mapper.toDomain(taskToSave);
     }
 
+    @Transactional
     @LogExecutionTime
     public TaskResponse updateTask(Long id, TaskRequest taskToUpdate){
         if(!repository.existsById(id)) {
@@ -70,7 +73,7 @@ public class TaskService {
         return mapper.toDomain(task);
     }
 
-
+    @Transactional
     @LogExecutionTime
     public void deleteTask(Long id){
         if(!repository.existsById(id)){
