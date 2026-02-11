@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     @LogExecutionTime
     @GetMapping
@@ -40,13 +42,19 @@ public class UserService {
     @Transactional
     @LogExecutionTime()
     public UserCreateResponse createUser(@Valid UserRequest userToCreate) {
+        String encodedPassword = passwordEncoder.encode(userToCreate.password());
+
         var newUser = new UserEntity(
                 null,
                 userToCreate.name(),
+                userToCreate.email(),
+                encodedPassword,
+                UserRole.ASSIGNEE,
                 null
-
         );
+
         repository.save(newUser);
+
         return mapper.toUserCreateResponse(newUser);
     }
 
