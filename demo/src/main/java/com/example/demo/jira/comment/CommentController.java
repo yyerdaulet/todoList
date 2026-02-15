@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("users/{user_id}/projects/{project_id}/tasks/{task_id}/comments")
+@RequestMapping("profiles/{profile_id}/projects/{project_id}/tasks/{task_id}/comments")
 @RestController
 public class CommentController {
     private final CommentService service;

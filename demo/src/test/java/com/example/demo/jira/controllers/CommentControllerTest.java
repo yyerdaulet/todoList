@@ -3,7 +3,7 @@ import com.example.demo.jira.TaskManagerApplication;
 import com.example.demo.jira.comment.dto.CommentResponse;
 import com.example.demo.jira.project.dto.ProjectResponse;
 import com.example.demo.jira.task.Dto.TaskResponse;
-import com.example.demo.jira.user.Dto.UserResponse;
+import com.example.demo.jira.profile.Dto.ProfileResponse;
 import com.example.demo.utils.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class CommentControllerTest {
 
     @Test
     void commentLifeCycle() throws Exception {
-        UserResponse createdUser = userHelper.createUser();  // post request(User)
+        ProfileResponse createdUser = userHelper.createUser();  // post request(User)
 
         Long userId = createdUser.id();
 

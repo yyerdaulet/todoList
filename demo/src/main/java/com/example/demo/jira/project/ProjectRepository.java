@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<ProjectEntity,Long> {
 
-    @Query("SELECT p from ProjectEntity p where p.owner.id = :user_id")
-    List<ProjectEntity> findByUserId(@Param("user_id") Long user_id);
+    @Query("SELECT p from ProjectEntity p where p.owner.id = :profile_id")
+    List<ProjectEntity> findByProfileId(@Param("profile_id") Long profile_id);
 }

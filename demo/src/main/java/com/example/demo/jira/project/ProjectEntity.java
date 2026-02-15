@@ -1,7 +1,7 @@
 package com.example.demo.jira.project;
 
 import com.example.demo.jira.task.TaskEntity;
-import com.example.demo.jira.user.UserEntity;
+import com.example.demo.jira.profile.ProfileEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -30,9 +30,9 @@ public class ProjectEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="profile_id")
     @JsonBackReference
-    private UserEntity owner;
+    private ProfileEntity owner;
 
 
     @OneToMany(mappedBy = "project",cascade = CascadeType.REMOVE)

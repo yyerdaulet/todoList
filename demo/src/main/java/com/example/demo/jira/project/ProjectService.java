@@ -4,7 +4,7 @@ import com.example.demo.jira.log.LogExecutionTime;
 import com.example.demo.jira.project.dto.ProjectCreateResponse;
 import com.example.demo.jira.project.dto.ProjectRequest;
 import com.example.demo.jira.project.dto.ProjectResponse;
-import com.example.demo.jira.user.UserRepository;
+import com.example.demo.jira.profile.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +15,18 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository repository;
     private final ProjectMapper mapper;
-    private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
-    public ProjectService(ProjectRepository repository, ProjectMapper mapper,UserRepository userRepository) {
+    public ProjectService(ProjectRepository repository, ProjectMapper mapper, ProfileRepository profileRepository) {
         this.repository = repository;
         this.mapper = mapper;
-        this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
     }
 
     @LogExecutionTime()
     public List<ProjectResponse> getAllProjects(Long user_id) {
         return repository.
-                findByUserId(user_id).
+                findByProfileId(user_id).
                 stream().
                 map(mapper::toDomain).toList();
     }
@@ -42,9 +42,9 @@ public class ProjectService {
 
     @Transactional
     @LogExecutionTime()
-    public ProjectCreateResponse createProject(Long user_id, ProjectRequest request) {
-        var userEntity = userRepository.findById(user_id).orElseThrow(
-                () -> new EntityNotFoundException("User not found")
+    public ProjectCreateResponse createProject(Long profile_id, ProjectRequest request) {
+        var userEntity = profileRepository.findById(profile_id).orElseThrow(
+                () -> new EntityNotFoundException("Profile not found")
         );
 
         var newProject = new ProjectEntity(

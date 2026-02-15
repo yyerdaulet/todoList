@@ -4,13 +4,10 @@ import com.example.demo.jira.comment.dto.CommentRequest;
 import com.example.demo.jira.comment.dto.CommentResponse;
 import com.example.demo.jira.log.LogExecutionTime;
 import com.example.demo.jira.task.TaskRepository;
-import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 

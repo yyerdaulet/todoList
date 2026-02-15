@@ -1,9 +1,8 @@
 package com.example.demo.utils;
 
-import com.example.demo.jira.user.Dto.UserResponse;
+import com.example.demo.jira.profile.Dto.ProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +19,7 @@ public class UserHelper {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public UserResponse createUser() throws Exception{
+    public ProfileResponse createUser() throws Exception{
         String requestJson = """
 			{
 				"name":"Yerdaulet"
@@ -36,7 +35,7 @@ public class UserHelper {
 
         String respond = creation.getResponse().getContentAsString();
 
-        return mapper.readValue(respond, UserResponse.class);
+        return mapper.readValue(respond, ProfileResponse.class);
 
     }
 

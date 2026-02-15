@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("users/{user_id}/projects")
+@RequestMapping("profile/{profile_id}/projects")
 @RestController()
 public class ProjectController {
     private final ProjectService projectService;
@@ -22,7 +22,7 @@ public class ProjectController {
     @GetMapping("")
     @LogExecutionTime()
     public ResponseEntity<List<ProjectResponse>> getAllProjects(
-            @PathVariable("user_id") Long user_id
+            @PathVariable("profile_id") Long user_id
     ){
         return ResponseEntity.status(HttpStatus.OK).body(projectService.getAllProjects(user_id));
     }
@@ -39,9 +39,9 @@ public class ProjectController {
     @LogExecutionTime()
     public ResponseEntity<ProjectCreateResponse> createProject(
             @RequestBody ProjectRequest request,
-            @PathVariable("user_id") Long user_id
+            @PathVariable("profile_id") Long profile_id
             ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(user_id,request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(profile_id,request));
     }
 
     @PutMapping("/{id}")

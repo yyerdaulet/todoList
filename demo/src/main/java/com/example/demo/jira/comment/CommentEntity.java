@@ -1,7 +1,6 @@
 package com.example.demo.jira.comment;
 
 import com.example.demo.jira.task.TaskEntity;
-import com.example.demo.jira.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

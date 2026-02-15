@@ -1,7 +1,7 @@
 package com.example.demo.utils;
 
 import com.example.demo.jira.project.dto.ProjectResponse;
-import com.example.demo.jira.user.Dto.UserResponse;
+import com.example.demo.jira.profile.Dto.ProfileResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,7 +40,7 @@ public class ProjectHelper {
         return mapper.readValue(respondProject, ProjectResponse.class);
     }
 
-    public void getProject(UserResponse createdUser,ProjectResponse createdProject) throws Exception {
+    public void getProject(ProfileResponse createdUser, ProjectResponse createdProject) throws Exception {
         Long userId = createdUser.id();
         String userName = createdUser.name();
 

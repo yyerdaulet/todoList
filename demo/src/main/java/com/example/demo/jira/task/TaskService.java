@@ -4,11 +4,9 @@ import com.example.demo.jira.project.ProjectRepository;
 import com.example.demo.jira.task.Dto.TaskRequest;
 import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.page.Page;
-import com.example.demo.jira.user.UserRepository;
+import com.example.demo.jira.profile.ProfileRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +17,7 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
-    private final UserRepository userRepository;
+    private final ProfileRepository userRepository;
     private final ProjectRepository projectRepository;
 
     @LogExecutionTime

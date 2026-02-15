@@ -3,8 +3,7 @@ package com.example.demo.jira.task;
 
 import com.example.demo.jira.comment.CommentEntity;
 import com.example.demo.jira.project.ProjectEntity;
-import com.example.demo.jira.user.UserEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.demo.jira.profile.ProfileEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -13,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -36,9 +34,9 @@ public class TaskEntity {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="profile_id")
     @JsonIgnore
-    private UserEntity manager;
+    private ProfileEntity manager;
 
     @ManyToOne()
     @JoinColumn(name="project_id")
