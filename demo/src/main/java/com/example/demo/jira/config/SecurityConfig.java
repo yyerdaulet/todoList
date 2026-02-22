@@ -29,12 +29,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> {})
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/","/login","/registration","/error").permitAll()
+                                .requestMatchers("/","/login","/register","/error").permitAll()
                                 .requestMatchers("/users/**").hasRole(UserRole.MANAGER.name())
                                 .requestMatchers("/users/**").hasRole(UserRole.ASSIGNEE.name())
                                 .anyRequest().authenticated()

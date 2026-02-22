@@ -20,6 +20,10 @@ public class ProfileMapper {
         return new @Valid ProfileCreateResponse(
                 profile.getId(),
                 profile.getName(),
+                profile.getLastName(),
+                profile.getBirthday(),
+                profile.getDegree(),
+                profile.getUniversity(),
                 null
         );
     }

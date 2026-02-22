@@ -1,5 +1,6 @@
 package com.example.demo.jira.user;
 
+import com.example.demo.jira.profile.ProfileEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +31,12 @@ public class UserEntity  {
     @Column(name="role",nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,
+                    fetch = FetchType.LAZY,optional = false
+    )
+    private ProfileEntity profile;
+
+
+
 }

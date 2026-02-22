@@ -1,13 +1,15 @@
 package com.example.demo.jira.profile;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.profile.Dto.ProfileCrReq;
 import com.example.demo.jira.profile.Dto.ProfileCreateResponse;
 import com.example.demo.jira.profile.Dto.ProfileRequest;
 import com.example.demo.jira.profile.Dto.ProfileResponse;
+import com.example.demo.jira.user.UserEntity;
+import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import java.util.List;
 @Service
 public class ProfileService {
     private final ProfileRepository repository;
+    private final UserRepository userRepository;
     private final ProfileMapper mapper;
 
     @LogExecutionTime
@@ -29,20 +32,30 @@ public class ProfileService {
     }
 
     @LogExecutionTime()
-    public ProfileResponse getProfileById(Long id) {
-        ProfileEntity user = repository
+    public ProfileCreateResponse getProfileById(Long id) {
+        ProfileEntity profile = repository
                 .findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("Profile Entity not found "));
-        return mapper.toDomain(user);
+                .orElseThrow( () -> new EntityNotFoundException("Profile Entity not found"));
+        return mapper.toProfileCreateResponse(profile);
     }
 
     @Transactional
     @LogExecutionTime()
-    public ProfileCreateResponse createProfile(@Valid ProfileRequest profileToCreate) {
+    public ProfileCreateResponse createProfile(@Valid ProfileCrReq profileToCreate) {
+
+        UserEntity user = userRepository.findById(profileToCreate.user_id()).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+
         var newProfile = new ProfileEntity(
                 null,
                 profileToCreate.name(),
-                null
+                profileToCreate.lastName(),
+                profileToCreate.birthday(),
+                profileToCreate.degree(),
+                profileToCreate.university(),
+                null,
+                user
         );
 
         repository.save(newProfile);

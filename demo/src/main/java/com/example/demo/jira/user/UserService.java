@@ -2,6 +2,8 @@ package com.example.demo.jira.user;
 
 import com.example.demo.jira.JwtCore;
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.profile.ProfileEntity;
+import com.example.demo.jira.profile.ProfileRepository;
 import com.example.demo.jira.user.Dto.UserCreateRequest;
 import com.example.demo.jira.user.Dto.UserLoginRequest;
 import com.example.demo.jira.user.Dto.UserLoginResponse;
@@ -9,13 +11,9 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
     private UserRepository repository;
+    private ProfileRepository profileRepository;
     private PasswordEncoder encoder;
     private AuthenticationManager manager;
     private JwtCore jwtCore;
@@ -38,7 +37,8 @@ public class UserService {
                 request.name(),
                 request.email(),
                 hashedCode,
-                request.role()
+                request.role(),
+                null
         );
         repository.save(user);
     }
@@ -49,9 +49,19 @@ public class UserService {
                 .authenticate(new UsernamePasswordAuthenticationToken(request.email(),request.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserEntity user = repository.findByEmailIgnoreCase(request.email()).orElseThrow(
+                () -> new EntityNotFoundException("User with such email not found")
+        );
+
         return new UserLoginResponse(
+                    user.getId(),
                     jwtCore.generateToken(authentication)
             );
 
+    }
+
+    public Boolean check(Long userId) {
+        return profileRepository.existsById(userId);
     }
 }

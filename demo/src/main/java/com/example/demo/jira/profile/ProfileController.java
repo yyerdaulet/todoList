@@ -1,6 +1,7 @@
 package com.example.demo.jira.profile;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.profile.Dto.ProfileCrReq;
 import com.example.demo.jira.profile.Dto.ProfileCreateResponse;
 import com.example.demo.jira.profile.Dto.ProfileRequest;
 import com.example.demo.jira.profile.Dto.ProfileResponse;
@@ -31,7 +32,7 @@ public class ProfileController {
 
     @GetMapping("/{id}")
     @LogExecutionTime()
-    public ResponseEntity<ProfileResponse> getProfileById(
+    public ResponseEntity<ProfileCreateResponse> getProfileById(
             @PathVariable("id") Long id
     ){
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getProfileById(id));
@@ -40,7 +41,7 @@ public class ProfileController {
     @PostMapping()
     @LogExecutionTime()
     public ResponseEntity<ProfileCreateResponse> createProfile(
-            @RequestBody @Valid ProfileRequest profileToCreate
+            @RequestBody @Valid ProfileCrReq profileToCreate
             ){
         return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(profileToCreate));
     }

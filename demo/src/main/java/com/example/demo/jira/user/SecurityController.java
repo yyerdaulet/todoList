@@ -16,13 +16,7 @@ public class SecurityController {
     private UserService service;
 
     @LogExecutionTime
-    @GetMapping("/success")
-    ResponseEntity<String> check(){
-        return ResponseEntity.status(HttpStatus.OK).body("Google ");
-    }
-
-    @LogExecutionTime
-    @PostMapping("/registration")
+    @PostMapping("/register")
     ResponseEntity<Void> registration(
             @RequestBody UserCreateRequest request
             ){
@@ -36,6 +30,13 @@ public class SecurityController {
             @RequestBody UserLoginRequest request
     ){
         return ResponseEntity.status(HttpStatus.OK).body(service.login(request));
+    }
+
+    @LogExecutionTime
+    @GetMapping("/login/{user_id}/check")
+    ResponseEntity<Boolean> check(
+           @PathVariable("user_id")  Long user_id){
+        return ResponseEntity.status(HttpStatus.OK).body(service.check(user_id));
     }
 
 }
