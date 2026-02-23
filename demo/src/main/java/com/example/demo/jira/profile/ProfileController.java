@@ -1,11 +1,9 @@
 package com.example.demo.jira.profile;
 
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.profile.Dto.ProfileCrReq;
-import com.example.demo.jira.profile.Dto.ProfileCreateResponse;
-import com.example.demo.jira.profile.Dto.ProfileRequest;
-import com.example.demo.jira.profile.Dto.ProfileResponse;
+import com.example.demo.jira.profile.Dto.*;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,12 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profiles")
+@AllArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;
 
     private final static Logger log = LoggerFactory.getLogger(ProfileController.class);
-
-    public ProfileController(ProfileService profileService) {this.profileService = profileService;}
 
     @GetMapping()
     @LogExecutionTime()

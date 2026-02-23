@@ -43,7 +43,7 @@ public class CommentService {
     public CommentResponse createComment(Long task_id,CommentRequest request) {
         var task = taskRepository.findById(task_id)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("Comment not found")
+                        () -> new EntityNotFoundException("Task not found")
                 );
         var comment = new CommentEntity(
                 null,

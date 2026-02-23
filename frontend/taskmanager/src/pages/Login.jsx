@@ -46,7 +46,7 @@ function Login( { setIsAuth }) {
             <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="tab-login" data-mdb-pill-init href="#pills-login" role="tab"
-                  aria-controls="pills-login" aria-selected="true">Login</a>
+                  aria-controls="pills-login" aria-selected="true"s>Login</a>
               </li>
               <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab-register" data-mdb-pill-init href="#pills-register" role="tab"

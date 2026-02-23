@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Null;
 import java.util.List;
 
 public record TaskResponse(
-        @Null
         Long id,
 
         @NotNull

@@ -1,6 +1,8 @@
 package com.example.demo.jira.task;
 
+import com.example.demo.jira.profile.ProfileEntity;
 import com.example.demo.jira.project.ProjectRepository;
+import com.example.demo.jira.task.Dto.SetAssignee;
 import com.example.demo.jira.task.Dto.TaskRequest;
 import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.log.LogExecutionTime;
@@ -17,7 +19,7 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository repository;
     private final TaskMapper mapper;
-    private final ProfileRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final ProjectRepository projectRepository;
 
     @LogExecutionTime
@@ -37,7 +39,7 @@ public class TaskService {
     @Transactional
     @LogExecutionTime
     public TaskResponse createTask(Long user_id,Long project_id,TaskRequest taskToCreate){
-        var user = userRepository.findById(user_id).orElseThrow(
+        var user = profileRepository.findById(user_id).orElseThrow(
                 () -> new EntityNotFoundException("User not found")
         );
         var project = projectRepository.findById(project_id).orElseThrow(
@@ -81,4 +83,20 @@ public class TaskService {
     }
 
 
+    public Void setAssignee(Long taskId, SetAssignee request) {
+        TaskEntity task = repository.findById(taskId).
+                orElseThrow(
+                        () -> new EntityNotFoundException("Task not found")
+                );
+
+        ProfileEntity profile = profileRepository.findByEmail(request.email())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User not found")
+                );
+
+        task.setAssignee(profile);
+        repository.save(task);
+
+        return null;
+    }
 }

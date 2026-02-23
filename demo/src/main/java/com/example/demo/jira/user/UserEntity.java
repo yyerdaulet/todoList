@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,7 +37,5 @@ public class UserEntity  {
                     fetch = FetchType.LAZY,optional = false
     )
     private ProfileEntity profile;
-
-
 
 }

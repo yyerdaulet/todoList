@@ -36,7 +36,7 @@ public class TaskEntity {
     @ManyToOne
     @JoinColumn(name="profile_id")
     @JsonIgnore
-    private ProfileEntity manager;
+    private ProfileEntity assignee;
 
     @ManyToOne()
     @JoinColumn(name="project_id")
@@ -45,7 +45,6 @@ public class TaskEntity {
 
     @OneToMany(mappedBy = "task",cascade = CascadeType.REMOVE)
     @JsonManagedReference
-     // @JoinColumn(name="comment_id")
     private List<CommentEntity> comments;
 
 

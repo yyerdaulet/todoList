@@ -1,27 +1,25 @@
 package com.example.demo.jira.project;
 
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.project.dto.ProjectCreateResponse;
-import com.example.demo.jira.project.dto.ProjectRequest;
-import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.profile.ProfileEntity;
+import com.example.demo.jira.project.dto.*;
 import com.example.demo.jira.profile.ProfileRepository;
+import com.example.demo.jira.user.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProjectService {
     private final ProjectRepository repository;
     private final ProjectMapper mapper;
     private final ProfileRepository profileRepository;
 
-    public ProjectService(ProjectRepository repository, ProjectMapper mapper, ProfileRepository profileRepository) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.profileRepository = profileRepository;
-    }
+
 
     @LogExecutionTime()
     public List<ProjectResponse> getAllProjects(Long user_id) {
@@ -51,6 +49,7 @@ public class ProjectService {
                 null,
                 request.name(),
                 userEntity,
+                null,
                 null
         );
         repository.save(newProject);
@@ -75,5 +74,36 @@ public class ProjectService {
             throw new EntityNotFoundException("Project not found");
         }
         repository.deleteById(id);
+    }
+
+    @Transactional
+    @LogExecutionTime
+    public ProjectAddAssigneeResponse addAssignee(Long projectId, ProjectAddAssigneeRequest request) {
+        ProfileEntity user = profileRepository.findByEmail(request.email())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User not found")
+                );
+
+        ProjectEntity project = repository.findById(projectId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Project not found")
+                );
+        var assignee = project.getAssignees();
+        assignee.add(user);
+
+        project.setAssignees(assignee);
+        repository.save(project);
+
+        return mapper.toProjectAddAssigneeResponse(user);
+    }
+
+    public ProjectAssigneesList getAssignee(Long projectId) {
+        ProjectEntity project = repository.findById(projectId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Project not found")
+                );
+
+        var assignee = project.getAssignees();
+        return mapper.toAssigneeList(assignee);
     }
 }

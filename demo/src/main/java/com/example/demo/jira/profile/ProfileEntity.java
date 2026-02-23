@@ -2,6 +2,7 @@ package com.example.demo.jira.profile;
 
 import com.example.demo.jira.project.ProjectEntity;
 import com.example.demo.jira.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -32,6 +33,9 @@ public class ProfileEntity {
     @Column(name="lastname",length=20)
     private String lastName;
 
+    @Column(name="email",length=20)
+    private String email;
+
     @JsonFormat(shape= JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy")
     @Column(name="birthday")
     private LocalDate birthday;
@@ -43,7 +47,6 @@ public class ProfileEntity {
     private String university;
 
     @OneToMany(mappedBy = "owner",cascade = CascadeType.REMOVE)
-    // @JoinColumn(name="projects_id")
     @JsonManagedReference
     private List<ProjectEntity> projects = new ArrayList<>();
 
@@ -52,4 +55,8 @@ public class ProfileEntity {
     @JoinColumn(name="id")
     private UserEntity user;
 
+    @ManyToOne
+    @JoinColumn(name="project")
+    @JsonBackReference
+    private ProjectEntity project;
 }

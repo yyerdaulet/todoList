@@ -34,10 +34,13 @@ public class ProjectEntity {
     @JsonBackReference
     private ProfileEntity owner;
 
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private List<ProfileEntity> assignees;
+
 
     @OneToMany(mappedBy = "project",cascade = CascadeType.REMOVE)
     @JsonManagedReference
-    // @JoinColumn(name="tasks")
     private List<TaskEntity> tasks;
 
 

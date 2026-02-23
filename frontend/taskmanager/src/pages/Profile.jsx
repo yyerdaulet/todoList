@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import api from "../api";
 
 export default function Profile(){
-    const { id } = useParams();
+    const { profile_id } = useParams();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect( () => {
         const fetchProfile = async () => {
             try {
-                const response = await api.get(`profiles/${id}`);
+                const response = await api.get(`profiles/${profile_id}`);
                 setProfile(response.data);
                 }
             catch(err){
@@ -21,7 +21,7 @@ export default function Profile(){
             };
 
             fetchProfile();
-        }, [id]);
+        }, [profile_id]);
 
         if (loading) return <p>Loading...</p>;
         if (!profile) return <p>Not found</p>;

@@ -1,16 +1,14 @@
 package com.example.demo.jira.project;
 
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.project.dto.ProjectCreateResponse;
-import com.example.demo.jira.project.dto.ProjectRequest;
-import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.project.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("profile/{profile_id}/projects")
+@RequestMapping("profiles/{profile_id}/projects")
 @RestController()
 public class ProjectController {
     private final ProjectService projectService;
@@ -22,9 +20,9 @@ public class ProjectController {
     @GetMapping("")
     @LogExecutionTime()
     public ResponseEntity<List<ProjectResponse>> getAllProjects(
-            @PathVariable("profile_id") Long user_id
+            @PathVariable("profile_id") Long profile_id
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAllProjects(user_id));
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAllProjects(profile_id));
     }
 
     @GetMapping("/{id}")
@@ -35,7 +33,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(projectService.getProjectById(id));
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     @LogExecutionTime()
     public ResponseEntity<ProjectCreateResponse> createProject(
             @RequestBody ProjectRequest request,
@@ -60,5 +58,23 @@ public class ProjectController {
     ){
         projectService.deleteProject(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+    @GetMapping("/{id}/assignee")
+    @LogExecutionTime()
+    public ResponseEntity<ProjectAssigneesList> getAssignee(
+            @PathVariable("id") Long project_id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.getAssignee(project_id));
+    }
+
+    @PostMapping("/{id}/assignee")
+    @LogExecutionTime()
+    public ResponseEntity<ProjectAddAssigneeResponse> addAssignee(
+            @PathVariable("id") Long project_id,
+            @RequestBody ProjectAddAssigneeRequest request
+            ){
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.addAssignee(project_id,request));
     }
 }

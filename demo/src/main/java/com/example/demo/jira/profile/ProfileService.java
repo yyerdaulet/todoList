@@ -1,10 +1,7 @@
 package com.example.demo.jira.profile;
 
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.profile.Dto.ProfileCrReq;
-import com.example.demo.jira.profile.Dto.ProfileCreateResponse;
-import com.example.demo.jira.profile.Dto.ProfileRequest;
-import com.example.demo.jira.profile.Dto.ProfileResponse;
+import com.example.demo.jira.profile.Dto.*;
 import com.example.demo.jira.user.UserEntity;
 import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,11 +48,13 @@ public class ProfileService {
                 null,
                 profileToCreate.name(),
                 profileToCreate.lastName(),
+                profileToCreate.email(),
                 profileToCreate.birthday(),
                 profileToCreate.degree(),
                 profileToCreate.university(),
                 null,
-                user
+                user,
+                null
         );
 
         repository.save(newProfile);

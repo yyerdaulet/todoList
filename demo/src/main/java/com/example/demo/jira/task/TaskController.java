@@ -1,5 +1,6 @@
 package com.example.demo.jira.task;
 
+import com.example.demo.jira.task.Dto.SetAssignee;
 import com.example.demo.jira.task.Dto.TaskRequest;
 import com.example.demo.jira.task.Dto.TaskResponse;
 import com.example.demo.jira.log.LogExecutionTime;
@@ -46,7 +47,7 @@ public class TaskController {
     }
 
     @LogExecutionTime
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<TaskResponse> createTask(
             @RequestBody @Valid TaskRequest taskToCreate,
             @PathVariable("profile_id") Long user_id,
@@ -61,7 +62,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask(
             @RequestBody @Valid TaskRequest taskToUpdate,
-            @PathVariable Long id
+            @PathVariable("id") Long id
     ){
         return ResponseEntity.ok().body(taskService.updateTask(id,taskToUpdate));
     }
@@ -70,10 +71,19 @@ public class TaskController {
     @LogExecutionTime
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
-            @PathVariable Long id
+            @PathVariable("id") Long id
     ){
         taskService.deleteTask(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @LogExecutionTime
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> setAssignee(
+            @RequestBody SetAssignee request,
+            @PathVariable("id") Long task_id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.setAssignee(task_id,request));
     }
 
 }

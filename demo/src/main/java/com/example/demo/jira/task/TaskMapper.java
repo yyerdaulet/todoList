@@ -11,7 +11,7 @@ public class TaskMapper {
                 task.getId(),
                 task.getTitle(),
                 task.getStatus(),
-                task.getManager().getName(),
+                task.getAssignee().getName(),
                 task.getComments()
         );
     }

@@ -1,10 +1,11 @@
 package com.example.demo.jira.project;
 
-import com.example.demo.jira.project.dto.ProjectCreateResponse;
-import com.example.demo.jira.project.dto.ProjectRequest;
-import com.example.demo.jira.project.dto.ProjectResponse;
+import com.example.demo.jira.profile.ProfileEntity;
+import com.example.demo.jira.project.dto.*;
 import com.example.demo.jira.task.TaskEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ProjectMapper {
@@ -25,6 +26,18 @@ public class ProjectMapper {
         );
     }
 
+    public ProjectAddAssigneeResponse toProjectAddAssigneeResponse(ProfileEntity entity){
+        return new ProjectAddAssigneeResponse(
+                entity.getName(),
+                entity.getLastName()
+        );
+    }
+
+    public ProjectAssigneesList toAssigneeList(List<ProfileEntity> assignee){
+        return new ProjectAssigneesList(
+                assignee
+        );
+    }
 
 
 }
