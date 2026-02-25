@@ -3,95 +3,100 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const [name,setName] = useState("");
-    const [email,setEmail] = useState("");
-    const [role,setRole] = useState("MANAGER");
-    const [password,setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("MANAGER");
+  const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault(); // Prevent page reload
 
-        try {
-        await axios.post("http://localhost:8080/register", {
-            name,
-            email,
-            role,
-            password
-        });
+    if (!agreed) {
+      alert("You must agree to the terms");
+      return;
+    }
 
-        navigate("/login")
-        }catch(error) {
-            console.error(error);
+    try {
+      await axios.post("http://localhost:8080/register", {
+        name,
+        email,
+        role,
+        password,
+      });
 
-        }
+      navigate("/login"); // Redirect after successful registration
+    } catch (error) {
+      console.error(error);
+      alert("Registration failed");
+    }
+  };
 
-
-
-    };
-
-    return (
-            <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-                            <form>
-
-
-                              <p class="text-center">or:</p>
-
-
-                              <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="registerName" class="form-control"
-                                 placeholder="Name"
-                                             onChange={(e) => setName(e.target.value)}
-                                 />
-
-                              </div>
-
-
-                              <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="email" id="registerEmail" class="form-control"
-                                        placeholder="Email"
-                                                    onChange={(e) => setEmail(e.target.value)}
-                                 />
-
-                              </div>
-
-
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <select class="form-select" aria-label="Default select example" value={role} onChange = {(e) => setRole(e.target.value)}>
-                                    <option value="MANAGER">MANAGER</option>
-                                    <option value="ASSIGNEE">ASSIGNEE</option>
-
-                                    </select>
-
-                                    </div>
-
-
-                              <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="registerPassword" class="form-control"
-                                 placeholder="Password"
-                                 onChange={(e) => setPassword(e.target.value)}
-                                 />
-
-                              </div>
-
-
-
-
-
-
-                              <div class="form-check d-flex justify-content-center mb-4">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-                                  aria-describedby="registerCheckHelpText" />
-                                <label class="form-check-label" for="registerCheck">
-                                  I have read and agree to the terms
-                                </label>
-                              </div>
-
-
-                              <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3" onClick={handleRegister}>Sign in</button>
-                            </form>
-
-
+  return (
+    <div style={{ maxWidth: "400px", margin: "50px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
+      <h2 style={{ textAlign: "center" }}>Register</h2>
+      <form onSubmit={handleRegister}>
+        <div style={{ marginBottom: "15px" }}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          />
         </div>
-    );
+
+        <div style={{ marginBottom: "15px" }}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          >
+            <option value="MANAGER">MANAGER</option>
+            <option value="ASSIGNEE">ASSIGNEE</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "15px", display: "flex", alignItems: "center" }}>
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={() => setAgreed(!agreed)}
+            style={{ marginRight: "8px" }}
+          />
+          <label>I have read and agree to the terms</label>
+        </div>
+
+        <button
+          type="submit"
+          style={{ width: "100%", padding: "10px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "4px" }}
+        >
+          Sign up
+        </button>
+      </form>
+    </div>
+  );
 }
+
