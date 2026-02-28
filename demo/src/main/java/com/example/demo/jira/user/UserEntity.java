@@ -1,12 +1,11 @@
 package com.example.demo.jira.user;
 
-import com.example.demo.jira.profile.ProfileEntity;
+import com.example.demo.jira.student.model.StudentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,9 +18,6 @@ public class UserEntity  {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name="name",nullable = false,length = 20)
-    private String name;
 
     @Column(name="email",nullable = false,length = 30,unique = true)
     private String email;
@@ -36,6 +32,6 @@ public class UserEntity  {
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,
                     fetch = FetchType.LAZY,optional = false
     )
-    private ProfileEntity profile;
+    private StudentEntity profile;
 
 }

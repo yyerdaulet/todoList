@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #2c3e50; }
+        .info { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Student Information</h1>
+
+<div class="info">
+    <strong>Name:</strong> <span th:text="${name}"></span>
+</div>
+
+<div class="info">
+    <strong>LastName:</strong> <span th:text="${lastname}"></span>
+</div>
+
+<div class="info">
+    <strong>MidName:</strong> <span th:text="${midname}"></span>
+</div>
+
+<div class="info">
+    <strong>Birthday:</strong> <span th:text="${birthday}"></span>
+</div>
+
+<div class="info">
+    <strong>City:</strong> <span th:text="${city}"></span>
+</div>
+
+<div class="info">
+    <strong>Degree:</strong> <span th:text="${degree}"></span>
+</div>
+
+<div class="info">
+    <strong>Mark:</strong> <span th:text="${mark}"></span>
+</div>
+
+</body>
+</html>

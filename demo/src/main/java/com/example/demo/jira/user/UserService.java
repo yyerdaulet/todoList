@@ -2,8 +2,7 @@ package com.example.demo.jira.user;
 
 import com.example.demo.jira.JwtCore;
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.profile.ProfileEntity;
-import com.example.demo.jira.profile.ProfileRepository;
+import com.example.demo.jira.student.repo.StudentRepository;
 import com.example.demo.jira.user.Dto.UserCreateRequest;
 import com.example.demo.jira.user.Dto.UserLoginRequest;
 import com.example.demo.jira.user.Dto.UserLoginResponse;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
     private UserRepository repository;
-    private ProfileRepository profileRepository;
+    private StudentRepository profileRepository;
     private PasswordEncoder encoder;
     private AuthenticationManager manager;
     private JwtCore jwtCore;
@@ -34,7 +33,6 @@ public class UserService {
         String hashedCode = encoder.encode(request.password());
         UserEntity user = new UserEntity(
                 null,
-                request.name(),
                 request.email(),
                 hashedCode,
                 request.role(),

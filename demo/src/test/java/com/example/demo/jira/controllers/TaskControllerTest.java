@@ -4,7 +4,7 @@ package com.example.demo.jira.controllers;
 import com.example.demo.jira.TaskManagerApplication;
 import com.example.demo.jira.project.dto.ProjectResponse;
 import com.example.demo.jira.task.Dto.TaskResponse;
-import com.example.demo.jira.profile.Dto.ProfileResponse;
+import com.example.demo.jira.student.dto.StudentResponse;
 import com.example.demo.utils.ProjectHelper;
 import com.example.demo.utils.TaskHelper;
 import com.example.demo.utils.TestConfig;
@@ -32,7 +32,7 @@ class TaskControllerTest {
 
     @Test
     void taskLifeCycle() throws Exception {
-        ProfileResponse createdUser = userHelper.createUser();  // post request(User)
+        StudentResponse createdUser = userHelper.createUser();  // post request(User)
 
         Long userId = createdUser.id();
 

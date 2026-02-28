@@ -35,9 +35,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/","/login","/register","/error").permitAll()
-                                .requestMatchers("/users/**").hasRole(UserRole.MANAGER.name())
-                                .requestMatchers("/users/**").hasRole(UserRole.ASSIGNEE.name())
+                                .requestMatchers("/","/login","/register","/error","/students/*/photo/**","/students").permitAll()
+                                .requestMatchers("/students/*/photo/**").hasRole(UserRole.STUDENT.name())
+                                .requestMatchers("/users/**").hasRole(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()
                             )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
