@@ -3,9 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("MANAGER");
+  const [role, setRole] = useState("STUDENT");
   const [password, setPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
 
@@ -21,7 +20,6 @@ export default function Register() {
 
     try {
       await axios.post("http://localhost:8080/register", {
-        name,
         email,
         role,
         password,
@@ -38,15 +36,6 @@ export default function Register() {
     <div style={{ maxWidth: "400px", margin: "50px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
       <h2 style={{ textAlign: "center" }}>Register</h2>
       <form onSubmit={handleRegister}>
-        <div style={{ marginBottom: "15px" }}>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
-          />
-        </div>
 
         <div style={{ marginBottom: "15px" }}>
           <input
@@ -64,8 +53,8 @@ export default function Register() {
             onChange={(e) => setRole(e.target.value)}
             style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
           >
-            <option value="MANAGER">MANAGER</option>
-            <option value="ASSIGNEE">ASSIGNEE</option>
+            <option value="STUDENT">STUDENT</option>
+            <option value="ADMIN">ADMIN</option>
           </select>
         </div>
 

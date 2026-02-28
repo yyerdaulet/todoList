@@ -9,7 +9,7 @@ function Login({ setIsAuth }) {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); //
 
     try {
       const response = await api.post("/login", { email, password });
@@ -21,9 +21,9 @@ function Login({ setIsAuth }) {
       setIsAuth(true);
 
       if (hasProfile.data) {
-        navigate(`/profiles/${response.data.id}`);
+        navigate(`/students/${response.data.id}`);
       } else {
-        navigate(`/profiles`);
+        navigate(`/students`);
       }
     } catch (error) {
       console.error(error);
