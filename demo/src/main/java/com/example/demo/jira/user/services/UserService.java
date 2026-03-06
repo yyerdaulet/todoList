@@ -1,45 +1,77 @@
-package com.example.demo.jira.user;
+package com.example.demo.jira.user.services;
 
 import com.example.demo.jira.JwtCore;
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.student.repo.StudentRepository;
+import com.example.demo.jira.profile.repo.ProfileRepository;
+import com.example.demo.jira.user.Dto.TokenDto;
 import com.example.demo.jira.user.Dto.UserCreateRequest;
 import com.example.demo.jira.user.Dto.UserLoginRequest;
 import com.example.demo.jira.user.Dto.UserLoginResponse;
+import com.example.demo.jira.user.UserEntity;
+import com.example.demo.jira.user.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.xml.bind.ValidationException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     private UserRepository repository;
-    private StudentRepository profileRepository;
+    private ProfileRepository profileRepository;
     private PasswordEncoder encoder;
     private AuthenticationManager manager;
     private JwtCore jwtCore;
+    private EmailService eService;
+
+    public  String verifyEmail(String token) {
+        UserEntity user = repository.findByVerificationToken(token).orElseThrow(
+                () -> new RuntimeException("Invalid token")
+        );
+
+        user.setEnabled(true);
+        user.setVerificationToken(null);
+
+        repository.save(user);
+
+        return "email verified successfully!";
+    }
 
     @LogExecutionTime
-    public void registration( UserCreateRequest request) {
+    public TokenDto registration( UserCreateRequest request) {
         if(repository.existsByEmail(request.email())){
             throw new EntityExistsException();
         }
         String hashedCode = encoder.encode(request.password());
+        String token = UUID.randomUUID().toString();
         UserEntity user = new UserEntity(
                 null,
                 request.email(),
                 hashedCode,
                 request.role(),
-                null
+                null,
+                false,
+                token
         );
         repository.save(user);
+
+        eService.sendVerificationEmail(user.getEmail(), token);
+
+        return new TokenDto(
+            token
+        );
     }
+
+
 
     @LogExecutionTime
     public UserLoginResponse login(UserLoginRequest request) {
@@ -51,6 +83,12 @@ public class UserService {
         UserEntity user = repository.findByEmailIgnoreCase(request.email()).orElseThrow(
                 () -> new EntityNotFoundException("User with such email not found")
         );
+
+        if(!user.getEnabled()){
+            throw new UsernameNotFoundException(
+                    "Not verified yet"
+            );
+        }
 
         return new UserLoginResponse(
                     user.getId(),

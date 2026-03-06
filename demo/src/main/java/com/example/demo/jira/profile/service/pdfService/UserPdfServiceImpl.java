@@ -1,7 +1,7 @@
-package com.example.demo.jira.student.service.pdfService;
+package com.example.demo.jira.profile.service.pdfService;
 
-import com.example.demo.jira.student.model.StudentEntity;
-import com.example.demo.jira.student.repo.StudentRepository;
+import com.example.demo.jira.profile.model.ProfileEntity;
+import com.example.demo.jira.profile.repo.ProfileRepository;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -18,24 +18,20 @@ import java.io.IOException;
 public class UserPdfServiceImpl implements UserPdfService{
 
     private final TemplateEngine templateEngine;
-    private final StudentRepository repository;
+    private final ProfileRepository repository;
 
 
     @Override
     public byte[] generateStudentPdf(Long id) {
-        StudentEntity student = repository.findById(id)
+        ProfileEntity student = repository.findById(id)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Student Not found")
                 );
         Context context = new Context();
-        context.setVariable("id",student.getJsn());
         context.setVariable("name",student.getName());
         context.setVariable("lastname",student.getLastName());
-        context.setVariable("midname",student.getMidName());
         context.setVariable("birthday",student.getBirthday());
-        context.setVariable("city",student.getCity());
         context.setVariable("degree",student.getDegree());
-        context.setVariable("mark",student.getMark());
 
         String html = templateEngine.process("student-info",context);
 

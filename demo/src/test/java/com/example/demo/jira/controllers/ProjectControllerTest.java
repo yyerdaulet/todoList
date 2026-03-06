@@ -3,7 +3,7 @@ package com.example.demo.jira.controllers;
 
 
 import com.example.demo.jira.project.dto.ProjectResponse;
-import com.example.demo.jira.student.dto.StudentResponse;
+import com.example.demo.jira.profile.dto.ProfileResponse;
 import com.example.demo.utils.ProjectHelper;
 import com.example.demo.utils.TestConfig;
 import com.example.demo.utils.UserHelper;
@@ -29,7 +29,7 @@ class ProjectControllerTest {
     @Test
     void projectLifeCycle() throws Exception {
 
-        StudentResponse createdUser = userHelper.createUser();  // post request(User)
+        ProfileResponse createdUser = userHelper.createUser();  // post request(User)
 
         Long userId = createdUser.id();
 

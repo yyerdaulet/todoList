@@ -1,6 +1,6 @@
 package com.example.demo.jira.user;
 
-import com.example.demo.jira.student.model.StudentEntity;
+import com.example.demo.jira.profile.model.ProfileEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +32,12 @@ public class UserEntity  {
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,
                     fetch = FetchType.LAZY,optional = false
     )
-    private StudentEntity profile;
+    private ProfileEntity profile;
+
+    @Column(name="enabled")
+    private Boolean enabled;
+
+    @Column(name="verification_token")
+    private String verificationToken;
 
 }

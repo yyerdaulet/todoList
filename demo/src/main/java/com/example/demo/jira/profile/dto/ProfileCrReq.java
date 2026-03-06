@@ -1,12 +1,14 @@
-package com.example.demo.jira.student.dto;
+package com.example.demo.jira.profile.dto;
 
-import com.example.demo.jira.student.Enum.Degree;
+import com.example.demo.jira.profile.Enum.Degree;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
-public record StudentCrReq(
+public record ProfileCrReq(
         Long user_id,
+
+        String orcid,
 
         String name,
 
@@ -25,4 +27,5 @@ public record StudentCrReq(
 
         Long jsn
 ){
+
 }

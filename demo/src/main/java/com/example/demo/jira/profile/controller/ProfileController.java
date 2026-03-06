@@ -1,9 +1,10 @@
-package com.example.demo.jira.student.controller;
+package com.example.demo.jira.profile.controller;
 
 import com.example.demo.jira.log.LogExecutionTime;
-import com.example.demo.jira.student.dto.*;
-import com.example.demo.jira.student.service.StudentService;
-import com.example.demo.jira.student.service.pdfService.UserPdfService;
+import com.example.demo.jira.profile.dto.*;
+import com.example.demo.jira.profile.service.OpenAlexService;
+import com.example.demo.jira.profile.service.ProfileService;
+import com.example.demo.jira.profile.service.pdfService.UserPdfService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,41 +24,58 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/profiles")
 @AllArgsConstructor
-public class StudentController {
-    private final StudentService studentService;
+public class ProfileController {
+    private final ProfileService profileService;
     private final UserPdfService userPdfService;
+    private final OpenAlexService openAlexService;
+
+    @GetMapping("/articles")
+    public String search(
+            @RequestParam String query
+    ){
+        return openAlexService.searchArticles(query);
+    }
+
 
     @GetMapping()
     @LogExecutionTime()
-    public ResponseEntity<List<StudentResponse>> getAllStudents(){
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.getAllStudents());
+    public ResponseEntity<List<ProfileResponse>> getAllProfiles(){
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getAllProfiles());
     }
 
     @GetMapping("/{id}")
     @LogExecutionTime()
-    public ResponseEntity<StudentResponse> getStudentById(
+    public ResponseEntity<ProfileResponse> getProfileById(
             @PathVariable("id") Long id
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getProfileById(id));
+    }
+
+    @GetMapping("/{id}/articles")
+    @LogExecutionTime()
+    public ResponseEntity<?> getArticles(
+        @PathVariable("id") Long id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getArticles(id));
     }
 
     @PostMapping()
     @LogExecutionTime()
-    public ResponseEntity<StudentCreateResponse> createStudent(
-            @RequestBody @Valid StudentCrReq studentToCreate
+    public ResponseEntity<ProfileCreateResponse> createProfile(
+            @RequestBody @Valid ProfileCrReq profileToCreate
             ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createStudent(studentToCreate));
+        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(profileToCreate));
     }
 
     @PutMapping("/{id}")
     @LogExecutionTime()
-    public ResponseEntity<StudentResponse> updateStudent(
+    public ResponseEntity<ProfileResponse> updateProfile(
             @PathVariable Long id,
-            @RequestBody @Valid StudentRequest studentToUpdate
+            @RequestBody @Valid ProfileRequest profileToUpdate
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.updateStudent(id,studentToUpdate));
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.updateProfile(id,profileToUpdate));
     }
 
     @DeleteMapping("/{id}")
@@ -66,24 +83,24 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(
             @PathVariable("id") Long id
     ){
-        studentService.deleteStudent(id);
+        profileService.deleteStudent(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/{id}/upload")
-    public ResponseEntity<StudentFileResponse> uploadPhoto(
+    public ResponseEntity<ProfileFileResponse> uploadPhoto(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file
             ) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.uploadStudentPhoto(id,file));
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.uploadProfilePhoto(id,file));
     }
 
     @PostMapping("/{id}/uploadFile")
-    public ResponseEntity<StudentFileResponse> uploadFile(
+    public ResponseEntity<ProfileFileResponse> uploadFile(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.uploadStudentMedicalPage(id,file));
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.uploadProfileMedicalPage(id,file));
     }
 
     @GetMapping("/{id}/download")

@@ -1,6 +1,6 @@
-package com.example.demo.jira.student.model;
+package com.example.demo.jira.profile.model;
 
-import com.example.demo.jira.student.Enum.Degree;
+import com.example.demo.jira.profile.Enum.Degree;
 import com.example.demo.jira.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -9,7 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -18,13 +19,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name="Profiles")
-public class StudentEntity {
+public class ProfileEntity {
     @Id
     @Column(name="id")
     private Long id;
 
-    @Column(name="jsn",unique = true,length = 12)
-    private Long jsn;
+    @Column(name="orcid")
+    private String orcid;
 
     @Column(name="name",nullable = false,length = 20)
     private String name;
@@ -32,28 +33,13 @@ public class StudentEntity {
     @Column(name="lastName",length=20)
     private String lastName;
 
-    @Column(name="midName",length=20)
-    private String midName;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name="birthday")
     private LocalDate birthday;
 
-    @Column(name="city",length = 15)
-    private String city;
-
     @Column(name="degree")
     @Enumerated(EnumType.STRING)
     private Degree degree;
-
-    @Column(name="mark",length = 3)
-    private Long mark;
-
-    @Column(name="photo_url")
-    private String photoURL;
-
-    @Column(name="medicalPageURL")
-    private String medicalPageURL;
 
     @OneToOne
     @MapsId

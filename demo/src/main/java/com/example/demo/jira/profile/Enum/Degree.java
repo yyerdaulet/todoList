@@ -1,4 +1,4 @@
-package com.example.demo.jira.student.Enum;
+package com.example.demo.jira.profile.Enum;
 
 public enum Degree {
     BACHELOR,

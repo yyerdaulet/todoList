@@ -35,8 +35,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/","/login","/register","/error","/students/*/photo/**","/students").permitAll()
-                                .requestMatchers("/students/*/photo/**").hasRole(UserRole.STUDENT.name())
+                                .requestMatchers("/","/login","/register/**","/error","/profiles/*/photo/**","/profiles/**","/verify").permitAll()
+                                .requestMatchers("/profiles/*/photo/**").hasRole(UserRole.USER.name())
                                 .requestMatchers("/users/**").hasRole(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()
                             )

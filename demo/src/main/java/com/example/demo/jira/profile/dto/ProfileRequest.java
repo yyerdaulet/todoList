@@ -1,14 +1,13 @@
-package com.example.demo.jira.student.dto;
+package com.example.demo.jira.profile.dto;
 
-import com.example.demo.jira.student.Enum.Degree;
+import com.example.demo.jira.profile.Enum.Degree;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public record StudentResponse(
+public record ProfileRequest(
         @Id
         @NotNull
         Long id,
@@ -27,10 +26,8 @@ public record StudentResponse(
 
         Degree degree,
 
-        Long mark,
+        Long mark
 
-        String photoURL,
 
-        String medicalPageURL
-) {
+){
 }

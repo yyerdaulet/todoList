@@ -1,7 +1,7 @@
 package com.example.demo.jira.controllers;
 
 import com.example.demo.jira.TaskManagerApplication;
-import com.example.demo.jira.student.dto.StudentResponse;
+import com.example.demo.jira.profile.dto.ProfileResponse;
 import com.example.demo.utils.TestConfig;
 import com.example.demo.utils.UserHelper;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class ProfileControllerTest {
     @Test
     void userLifeCycle() throws Exception {
 
-        StudentResponse createdUser = helper.createUser();  // post request
+        ProfileResponse createdUser = helper.createUser();  // post request
 
         Long userId = createdUser.id();
 

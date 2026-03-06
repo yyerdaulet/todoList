@@ -1,4 +1,4 @@
-package com.example.demo.jira.student.service;
+package com.example.demo.jira.profile.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

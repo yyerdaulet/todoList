@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import StudentsPage from "./pages/StudentsPage";
 import AdminLayout from "./pages/AdminLayout";
 import Dashboard from "./pages/Dashboard";
+import VerifyEmail from "./pages/VerifyEmail"
 function App() {
   const [isAuth,setIsAuth] = useState(!!localStorage.getItem("token"));
 
@@ -22,7 +23,6 @@ function App() {
         ) : (
           <>
             <Link to={`/profiles/${localStorage.getItem("id")}`}>Profile</Link>
-            <Link to={`/profiles/${localStorage.getItem("id")}/projects`}>Projects</Link>
             <button onClick={() => {
               localStorage.removeItem("token");
               setIsAuth(false);
@@ -34,11 +34,12 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
-        <Route path="/students/:student_id" element={<Profile />} />
+        <Route path="/profiles/:profile_id" element={<Profile />} />
         <Route path="/admin" element={<AdminLayout />} />
-          <Route path="/admin/students" element={<StudentsPage />} />
+          <Route path="/admin/profiles" element={<StudentsPage />} />
           <Route path="dashboard" element={<Dashboard />} />
-        <Route path="/students" element={<CreateProfile />} />
+        <Route path="/profiles" element={<CreateProfile />} />
+        <Route path="/register/verify" element={<VerifyEmail />} />
       </Routes>
     </div>
   );

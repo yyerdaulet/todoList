@@ -1,4 +1,4 @@
-package com.example.demo.jira.student.service.pdfService;
+package com.example.demo.jira.profile.service.pdfService;
 
 import org.springframework.stereotype.Component;
 

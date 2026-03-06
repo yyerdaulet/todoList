@@ -3,7 +3,7 @@ package com.example.demo.jira.user;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public enum UserRole {
-    STUDENT,
+    USER,
     ADMIN;
 
     public SimpleGrantedAuthority toAuthority(){

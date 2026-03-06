@@ -1,9 +1,11 @@
 package com.example.demo.jira.user;
 
 import com.example.demo.jira.log.LogExecutionTime;
+import com.example.demo.jira.user.Dto.TokenDto;
 import com.example.demo.jira.user.Dto.UserCreateRequest;
 import com.example.demo.jira.user.Dto.UserLoginRequest;
 import com.example.demo.jira.user.Dto.UserLoginResponse;
+import com.example.demo.jira.user.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,10 @@ public class SecurityController {
 
     @LogExecutionTime
     @PostMapping("/register")
-    ResponseEntity<Void> registration(
+    ResponseEntity<TokenDto> registration(
             @RequestBody UserCreateRequest request
             ){
-        service.registration(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.registration(request));
     }
 
     @LogExecutionTime
@@ -30,6 +31,11 @@ public class SecurityController {
             @RequestBody UserLoginRequest request
     ){
         return ResponseEntity.status(HttpStatus.OK).body(service.login(request));
+    }
+
+    @GetMapping("register/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token){
+        return ResponseEntity.status(200).body(service.verifyEmail(token));
     }
 
     @LogExecutionTime
