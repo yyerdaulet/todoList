@@ -46,4 +46,6 @@ public class ProfileEntity {
     @JoinColumn(name="id")
     private UserEntity user;
 
+
+
 }

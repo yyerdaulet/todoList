@@ -12,6 +12,7 @@ public class ProfileMapper {
     public ProfileResponse toDomain(ProfileEntity profile){
         return new ProfileResponse(
                 profile.getId(),
+                profile.getOrcid(),
                 profile.getName(),
                 profile.getLastName(),
                 profile.getBirthday(),

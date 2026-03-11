@@ -14,18 +14,10 @@ public record ProfileCrReq(
 
         String lastName,
 
-        String midName,
-
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate birthday,
 
-        Degree degree,
-
-        Long mark,
-
-        String city,
-
-        Long jsn
+        Degree degree
 ){
 
 }

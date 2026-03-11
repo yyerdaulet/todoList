@@ -12,6 +12,8 @@ public record ProfileResponse(
         @NotNull
         Long id,
 
+        String orcid,
+
         @NotNull
         String name,
 

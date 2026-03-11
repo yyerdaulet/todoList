@@ -2,6 +2,7 @@ package com.example.demo.jira.profile.controller;
 
 import com.example.demo.jira.log.LogExecutionTime;
 import com.example.demo.jira.profile.dto.*;
+import com.example.demo.jira.profile.service.IEEExploreApi;
 import com.example.demo.jira.profile.service.OpenAlexService;
 import com.example.demo.jira.profile.service.ProfileService;
 import com.example.demo.jira.profile.service.pdfService.UserPdfService;
@@ -29,15 +30,21 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     private final UserPdfService userPdfService;
-    private final OpenAlexService openAlexService;
 
-    @GetMapping("/articles")
-    public String search(
-            @RequestParam String query
+    @GetMapping("/{id}/articles")
+    public ResponseEntity<List<ArticleResponse>> getArticles(
+            @PathVariable Long id
     ){
-        return openAlexService.searchArticles(query);
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getArticles(id));
     }
 
+    @GetMapping("/{id}/articles/{article_id}")
+    @LogExecutionTime
+    public ResponseEntity<ArticleResponse> getArticle(
+            @PathVariable String article_id
+    ) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.getArticle(article_id));
+    }
 
     @GetMapping()
     @LogExecutionTime()
@@ -53,12 +60,15 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getProfileById(id));
     }
 
-    @GetMapping("/{id}/articles")
-    @LogExecutionTime()
-    public ResponseEntity<?> getArticles(
-        @PathVariable("id") Long id
+
+
+    @PostMapping("/{id}/articles")
+    @LogExecutionTime
+    public ResponseEntity<ArticleResponse> createArticle(
+            @PathVariable Long id,
+            @RequestBody ArticleResponse request
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(profileService.getArticles(id));
+        return ResponseEntity.status(HttpStatus.OK).body(profileService.createArticle(id,request));
     }
 
     @PostMapping()

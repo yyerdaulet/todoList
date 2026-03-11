@@ -286,7 +286,7 @@ function TopCollaborators({ articles, profileName }) {
     articles.forEach((article) => {
       if (!article.authors) return;
       article.authors
-        .split(" ,")
+        .split(", ")
         .map((n) => n.trim())
         .filter(Boolean)
         .forEach((name) => {

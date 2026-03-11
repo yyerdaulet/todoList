@@ -51,8 +51,15 @@ public class UserService {
         if(repository.existsByEmail(request.email())){
             throw new EntityExistsException();
         }
-        String hashedCode = encoder.encode(request.password());
+
         String token = UUID.randomUUID().toString();
+        try {
+            eService.sendVerificationEmail(request.email(), token);
+        }catch(Exception e){
+            throw e ;
+        }
+
+        String hashedCode = encoder.encode(request.password());
         UserEntity user = new UserEntity(
                 null,
                 request.email(),
@@ -64,7 +71,7 @@ public class UserService {
         );
         repository.save(user);
 
-        eService.sendVerificationEmail(user.getEmail(), token);
+
 
         return new TokenDto(
             token
