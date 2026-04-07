@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class LogExecutionTimeAspect{
     private final static Logger log = LoggerFactory.getLogger(LogExecutionTimeAspect.class);
     @Around("@annotation(com.example.demo.task.annotation.LogExecutionTime)")
-    public Object logExecutionTime(ProceedingJoinPoint pjt) throws Throwable{
+    public Object LogExecutionTime(ProceedingJoinPoint pjt) throws Throwable{
         long startTime = System.nanoTime();
         try{
             return pjt.proceed();

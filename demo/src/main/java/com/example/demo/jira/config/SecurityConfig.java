@@ -1,8 +1,8 @@
 package com.example.demo.jira.config;
 
-import com.example.demo.jira.TokenFilter;
-import com.example.demo.jira.user.UserRole;
-import com.example.demo.jira.user.UserRepository;
+import com.example.demo.jira.authentication.details.TokenFilter;
+import com.example.demo.jira.authentication.enums.UserRole;
+import com.example.demo.jira.authentication.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/","/login","/register/**","/error","/profiles/*/photo/**","/profiles/**","/verify").permitAll()
+                                .requestMatchers("/news","/","/login","/register/**","/error","/profiles/*/photo/**","/profiles/**","/verify","/labs/*","/labs").permitAll()
                                 .requestMatchers("/profiles/*/photo/**").hasRole(UserRole.USER.name())
                                 .requestMatchers("/users/**").hasRole(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()

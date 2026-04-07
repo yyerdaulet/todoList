@@ -239,7 +239,7 @@ function Login({ setIsAuth }) {
       setIsAuth(true);
 
       if (hasProfile.data) {
-        navigate(`/profiles/${response.data.id}`);
+        navigate(`/profiles/main`);
       } else {
         navigate(`/profiles`);
       }
