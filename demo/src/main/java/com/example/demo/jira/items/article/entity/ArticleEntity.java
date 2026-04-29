@@ -18,6 +18,10 @@ import java.util.Set;
 @Entity
 @Table(name="Articles")
 public class ArticleEntity {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name="description",length = 10000)
     private String description;
 
@@ -30,7 +34,6 @@ public class ArticleEntity {
     @Column(name="referenced_works_count")
     private Integer referenced_works_count;
 
-    @Id
     @Column(name="doi",unique = true)
     private String doi;
 

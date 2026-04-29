@@ -35,6 +35,16 @@ public class ArticleController {
                 .body(service.getArticlesById(profile_id));
     }
 
+    @GetMapping("/profiles/{profileId}/articles/{articleId}")
+    public ResponseEntity<ArticleResponse> getArticleById(
+            @PathVariable("profileId") Long profile_id,
+            @PathVariable("articleId") Long articleId
+    ){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.getArticleById(articleId));
+    }
+
+
     @LogExecutionTime
     @GetMapping("/labs/{lab_id}/articles/update")
     public ResponseEntity<Void> updateArticles(

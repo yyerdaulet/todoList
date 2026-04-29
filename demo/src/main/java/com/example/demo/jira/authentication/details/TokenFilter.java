@@ -6,6 +6,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +23,12 @@ import java.io.IOException;
 public class TokenFilter extends OncePerRequestFilter {
     private JwtCore jwtCore;
     private UserDetailsService userDetailsService;
+    private final static Logger log = LoggerFactory.getLogger(TokenFilter.class);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         String jwt = null;
         String username = null;
         UserDetails userDetails = null;
@@ -36,7 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 try{
                     username = jwtCore.getName(jwt);
                 }catch (ExpiredJwtException e){
-                    System.out.println("Token expired");
+                    log.warn("Token expired");
                 }
 
                 if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -52,7 +58,7 @@ public class TokenFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
+            log.error("error : {}", String.valueOf(e));
         }
 
         filterChain.doFilter(request,response);

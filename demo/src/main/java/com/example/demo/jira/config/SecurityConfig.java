@@ -24,18 +24,21 @@ public class SecurityConfig {
     private final UserRepository userRepository;
 
     private TokenFilter tokenFilter;
-
-    @Bean
+      @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> {})
+                .headers((headers) -> headers.frameOptions(
+                        (frameOptions) -> frameOptions.sameOrigin()
+                ))
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/news","/","/login","/register/**","/error","/profiles/*/photo/**","/profiles/**","/verify","/labs/*","/labs").permitAll()
+                                .requestMatchers("/","/login","/register/**","/error","/verify").permitAll()
+                                .requestMatchers("/ws-chat/**", "/ws/**").permitAll()
                                 .requestMatchers("/profiles/*/photo/**").hasRole(UserRole.USER.name())
                                 .requestMatchers("/users/**").hasRole(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()
@@ -43,6 +46,7 @@ public class SecurityConfig {
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                         .build();
     }
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

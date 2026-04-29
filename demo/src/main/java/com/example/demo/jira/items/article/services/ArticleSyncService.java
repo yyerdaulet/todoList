@@ -95,6 +95,7 @@ public class ArticleSyncService {
 
     private void createNew(AlexResponseDTO article,Set<ProfileEntity> authors){
         ArticleEntity entity = new ArticleEntity(
+                null,
                 textBuilder.BuildTextFromIndex(article.abstract_inverted_index()),
                 article.title(),
                 article.cited_by_count(),

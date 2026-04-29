@@ -5,6 +5,7 @@ import com.example.demo.jira.items.profile.dto.ProfileResponse;
 import java.util.List;
 
 public record ArticleResponse(
+        Long id,
     String description,
     List<ProfileResponse> authors,
     String title,
@@ -12,7 +13,6 @@ public record ArticleResponse(
     Integer referenced_works_count,
     String doi,
     Integer publication_year,
-    String id,
     Long lab_id
 ) {
 }

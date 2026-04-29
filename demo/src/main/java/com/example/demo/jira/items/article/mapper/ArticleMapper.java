@@ -34,6 +34,7 @@ public class ArticleMapper {
                     .toList();
 
             return new ArticleResponse(
+                    null,
                     textBuilder.BuildTextFromIndex(work.abstract_inverted_index()),
                     authors,
                     work.title(),
@@ -41,7 +42,6 @@ public class ArticleMapper {
                     work.referenced_works_count(),
                     work.doi(),
                     work.publication_year(),
-                    work.id(),
                     labId
             );
     }
@@ -54,6 +54,7 @@ public class ArticleMapper {
 
     public ArticleResponse toDomain(ArticleEntity article){
             return new ArticleResponse(
+                    article.getId(),
                     article.getDescription(),
                     article.getAuthors()
                             .stream()
@@ -63,7 +64,6 @@ public class ArticleMapper {
                     article.getReferenced_works_count(),
                     article.getDoi(),
                     article.getPublication_year(),
-                    null,
                     null
             );
     }

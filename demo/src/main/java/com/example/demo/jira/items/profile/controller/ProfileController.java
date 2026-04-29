@@ -32,7 +32,7 @@ public class ProfileController {
     public ResponseEntity<List<ProfileResponse>> getAllProfiles(){
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getAllProfiles());
     }
-
+    
     @LogExecutionTime
     @GetMapping("/labs/{lab_id}/profiles")
     public ResponseEntity<List<ProfileResponse>> getAllProfilesByLabId(

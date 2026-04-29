@@ -41,15 +41,12 @@ public class ArticleService {
                                 "Lab not found"
                         )
                 );
-
-      //  List<String> listOrcid = lab.getResearches().stream().map(ProfileEntity::getOrcid).toList();
         List<String> listOrcid = ProfileUtils.fetchListORCID(lab.getResearches());
-        logger.info("List of orcid : " + listOrcid.size());
 
 
-         // List<ArticleEntity> articles = articleRepository.findAllByResearchersOrcids(listOrcid);
+
         List<ArticleEntity> articles = articleRepository.findAll();
-        logger.info("We send data, it's not us fault; The data : " + articles.size());
+
 
 
         return articles.stream().map(articleMapper::toDomain).toList();
@@ -71,5 +68,14 @@ public class ArticleService {
         return articleRepository.findAll().stream().map(
                 articleMapper::toDomain
         ).toList();
+    }
+
+    public ArticleResponse getArticleById(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Article Not Found : " + articleId)
+                );
+        return articleMapper.toDomain(article);
+
     }
 }
