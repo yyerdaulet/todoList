@@ -305,26 +305,76 @@ Client → POST /ai/chat → Spring Boot → RabbitMQ → RAG Service → LLM �
 
 ## Getting Started
 
+### Prerequisites
+- Docker & Docker Compose installed
+- `.env` file configured (see below)
+
+### 1. Clone the repo
+
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-org/researchhub.git
+git clone https://github.com/yyerdaulet/researchhub.git
+cd researchhub
+```
 
-# 2. Configure environment
-cp .env.example .env
-# Set: DB_URL, JWT_SECRET, RABBITMQ_URL, OPENALEX_EMAIL
+### 2. Configure environment
 
-# 3. Run backend
-cd backend
-./mvnw spring-boot:run
+Create a `.env` file in the project root:
 
-# 4. Run RAG service
-cd rag-service
-pip install -r requirements.txt
-uvicorn main:app --port 8001
+```env
+# Database
+DB_NAME=researchhub
+DB_USER=postgres
+DB_PASSWORD=your_db_password
 
-# 5. Run frontend
-cd frontend
-npm install && npm start
+# JWT
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRATION=86400000
+
+# Mail
+MAIL_USERNAME=your@email.com
+MAIL_PASSWORD=your_mail_password
+
+# Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
+
+# RabbitMQ
+RABBITMQ_USER=admin
+RABBITMQ_PASSWORD=your_rabbitmq_password
+
+# RAG DBs
+MAIN_DB=postgresql://postgres:your_db_password@db:5432/researchhub
+RAG_DB=postgresql://postgres:your_db_password@db:5432/researchhub_rag
+```
+
+### 3. Run with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+That's it. All services start in the correct order:
+
+```
+PostgreSQL (healthy) ──┐
+                       ├──► Backend :8080
+RabbitMQ  (healthy) ───┘
+RAG Service :8000 ─────► Backend (RAG_SERVICE_URL)
+Backend ───────────────► Frontend :3000
+```
+
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8080 |
+| RAG Service | http://localhost:8000 |
+| RabbitMQ UI | http://localhost:15672 |
+
+### 4. Stop
+
+```bash
+docker compose down        # stop containers
+docker compose down -v     # stop + remove volumes (wipe DB)
+```
 ```
 
 ---
