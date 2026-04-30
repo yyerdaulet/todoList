@@ -246,7 +246,6 @@ export default function VerifyEmail() {
 
         {/* Brand */}
         <div className="ve-brand">
-          <div className="ve-brand-icon">🎓</div>
           <div className="ve-brand-name">ResearchHub</div>
         </div>
 

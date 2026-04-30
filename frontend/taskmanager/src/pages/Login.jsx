@@ -239,7 +239,7 @@ function Login({ setIsAuth }) {
       setIsAuth(true);
 
       if (hasProfile.data) {
-        navigate(`/profiles/main`);
+        navigate(`/main`);
       } else {
         navigate(`/profiles`);
       }
@@ -260,7 +260,6 @@ function Login({ setIsAuth }) {
 
         {/* Brand */}
         <div className="ln-brand">
-          <div className="ln-brand-icon">🎓</div>
           <div className="ln-brand-name">ResearchHub</div>
           <div className="ln-brand-sub">Academic Profile Platform</div>
         </div>

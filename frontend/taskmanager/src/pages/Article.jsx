@@ -244,7 +244,8 @@ if (!document.head.querySelector("style[data-av]")) {
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function parseAuthors(raw) {
   if (!raw) return [];
-  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+  if (Array.isArray(raw)) return raw.map(p => `${p.name} ${p.lastName ?? ""}`.trim());
+  return [];
 }
 
 /* ─── Component ──────────────────────────────────────────────────────────── */

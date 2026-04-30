@@ -6,7 +6,6 @@ import CreateProfile from "./pages/CreateProfile";
 import { useState, useEffect, useRef } from "react";
 import StudentsPage from "./pages/StudentsPage";
 import AdminPanel from "./pages/Admin";
-import Dashboard from "./pages/Dashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import Article from "./pages/Article";
 import CreateArticle from "./pages/CreateArticle";
@@ -15,6 +14,9 @@ import LabPage from "./pages/LabPage";
 import CreateProject from "./pages/CreateProject";
 import ProjectPage from "./pages/ProjectPage";
 import api from "./api";
+import Chats from "./pages/Chats";
+import ChatPage from "./pages/ChatPage";
+import { useNavigate } from "react-router-dom";
 
 /* ─── Font + styles ──────────────────────────────────────────────────────── */
 const fontLink = document.createElement("link");
@@ -397,8 +399,7 @@ function Navbar({ isAuth, onLogout }) {
 
   return (
     <nav className="app-nav">
-      <Link to="/" className="app-nav-brand">
-        <div className="app-nav-brand-icon">🎓</div>
+      <Link to="/main" className="app-nav-brand">
         <span className="app-nav-brand-name">ResearchHub</span>
       </Link>
 
@@ -415,8 +416,11 @@ function Navbar({ isAuth, onLogout }) {
         ) : (
           <>
             <Link to={`/profiles/${id}`} className={navClass(`/profiles/${id}`)}>
-              👤 My Profile
+               My Profile
             </Link>
+            <Link to="/chats" className={navClass("/chats")}>
+                   Chats
+                </Link>
             <div className="app-nav-sep" />
             <div className="app-nav-avatar">
               {email[0].toUpperCase()}
@@ -435,10 +439,13 @@ function Navbar({ isAuth, onLogout }) {
 function App() {
   const [isAuth,  setIsAuth]  = useState(!!localStorage.getItem("token"));
   const [aiOpen,  setAiOpen]  = useState(false);
+  const navigate = useNavigate();
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuth(false);
+    navigate("/login");
   };
 
   return (
@@ -451,13 +458,14 @@ function App() {
           <Route path="/profiles/:profile_id" element={<Profile />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/admin/profiles" element={<StudentsPage />} />
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="/profiles" element={<CreateProfile />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:chat_id" element={<ChatPage />} />
           <Route path="/register/verify" element={<VerifyEmail />} />
           <Route path="/profiles/:profile_id/articles/:article_id" element={<Article />} />
           <Route path="/profiles/:profile_id/articles" element={<CreateArticle />} />
           <Route path="/profiles/:profile_id/projects" element={<CreateProject />} />
-          <Route path="/projects/:project_id" element={<ProjectPage />} />
+          <Route path="/profiles/:profile_id/projects/:project_id/" element={<ProjectPage />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/labs/:lab_id" element={<LabPage />} />
         </Routes>

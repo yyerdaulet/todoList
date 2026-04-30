@@ -6,11 +6,14 @@ from pydantic import BaseModel
 from ingest import ingest_all
 from chat import chat
 from rabbitmq import start_consumer
+import time
+
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting ingestion...")
-
+    time.sleep(15)
     ingest_all()
 
     asyncio.create_task(start_consumer())

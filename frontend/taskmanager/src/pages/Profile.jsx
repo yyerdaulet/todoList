@@ -680,65 +680,131 @@ function StatsCard({ articles, projects }) {
   );
 }
 
+/* ─── ProjectsSection ────────────────────────────────────────────────────── */
+function ProjectsSection({ projects, profileId }) {
+  const navigate = useNavigate();
+
+  if (projects.length === 0) return (
+    <div className="pv-empty">No projects yet</div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {projects.map((project, idx) => (
+        <div
+          key={project.id}
+          className="pv-card pv-fade"
+          style={{ animationDelay: `${idx * 0.04}s`, cursor: "pointer" }}
+          onClick={() => navigate(`/profiles/${profileId}/projects/${project.id}`)}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ flex: 1 }}>
+              <div className="pv-card-title">{project.title}</div>
+              {project.purpose && (
+                <div className="pv-card-authors" style={{ marginTop: 4 }}>
+                  {project.purpose}
+                </div>
+              )}
+              <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                {project.profiles?.map(p => (
+                  <span key={p.id} style={{
+                    fontSize: "0.72rem", background: "#f0f2f5",
+                    borderRadius: 6, padding: "2px 8px", color: "#656d76"
+                  }}>
+                    👤 {p.name} {p.lastName ?? ""}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <span style={{
+              fontSize: "0.72rem", fontWeight: 700,
+              padding: "4px 10px", borderRadius: 8,
+              background: project.status === "DONE" ? "#dafbe1" : project.status === "IN_PROGRESS" ? "#dbeafe" : "#fff8c5",
+              color: project.status === "DONE" ? "#1a7f37" : project.status === "IN_PROGRESS" ? "#0969da" : "#9a6700",
+            }}>
+              {project.status ?? "—"}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ─── ArticlesSection ────────────────────────────────────────────────────── */
-const ArticlesSection = ({ articles, projects, profile,profileId,setProfile }) => {
+const ArticlesSection = ({
+  articles,
+  projects,
+  profile,
+  profileId,
+  setProfile
+}) => {
   const navigate = useNavigate();
   const id = localStorage.getItem("id");
 
   const handleOpenArticle = (article) => {
-    let article_link;
-    if (article.doi) {
-      article_link = article.doi.split("https://doi.org/").pop();
-      if (article_link.startsWith("10.1109")) {
-        article_link = article_link.split(".").pop();
-      } else if (/^\d+$/.test(article.id)) {
-        article_link = article.id;
-      } else {
-        article_link = article.id.split("/").pop();
-      }
-    }
-    navigate(`/profiles/${id}/articles/${article_link}`);
+    if (!article?.id) return;
+
+    navigate(`/profiles/${id}/articles/${article.id}`);
   };
 
-  const totalCitations = articles.reduce((s, a) => s + (a.cited_by_count || 0), 0);
+  const totalCitations = articles.reduce(
+    (s, a) => s + (a.cited_by_count || 0),
+    0
+  );
 
   return (
     <div className="pv-root">
-
-      {/* ── Banner ── */}
       <div className="pv-banner">
         <div className="pv-banner-noise" />
         <div className="pv-banner-inner">
-          <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>
+          <div
+            style={{
+              fontSize: "0.72rem",
+              color: "rgba(255,255,255,0.45)",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              marginBottom: 8
+            }}
+          >
             Researcher Profile
           </div>
-          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", color: "#fff", lineHeight: 1.15 }}>
+
+          <div
+            style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: "clamp(1.8rem,4vw,2.8rem)",
+              color: "#fff"
+            }}
+          >
             {profile.name} {profile.lastName || ""}
           </div>
         </div>
       </div>
 
-      {/* ── Profile card ── */}
       <div className="pv-profile-card pv-fade">
         <div className="pv-profile-inner">
           <ProfileImageUpload
             profileId={profileId}
-            currentImage={profile.profileImage ? `${api.defaults.baseURL}/profiles/${profileId}/image` : null}
-            onUpload={() => api.get(`/profiles/${profileId}/image`).then(r => setProfile(r.data))}
+            currentImage={
+              profile.profileImage
+                ? `${api.defaults.baseURL}/profiles/${profileId}/image`
+                : null
+            }
+            onUpload={() =>
+              api
+                .get(`/profiles/${profileId}/image`)
+                .then(r => setProfile(r.data))
+            }
           />
 
           <div className="pv-profile-info">
-            <div className="pv-profile-name">{profile.name} {profile.lastName || ""}</div>
-            <div className="pv-profile-sub">{profile.degree || "Researcher"}</div>
-            <div className="pv-chips">
-              {profile.orcid && (
-                <a href={`https://orcid.org/${profile.orcid}`} target="_blank" rel="noreferrer" className="pv-chip">
-                  <span style={{ color: "#a6ce39", fontWeight: 800, fontSize: "0.7rem" }}>iD</span>
-                  {profile.orcid}
-                </a>
-              )}
-              {profile.degree  && <span className="pv-chip">🎓 {profile.degree}</span>}
-              {profile.birthday && <span className="pv-chip">📅 {profile.birthday}</span>}
+            <div className="pv-profile-name">
+              {profile.name} {profile.lastName || ""}
+            </div>
+
+            <div className="pv-profile-sub">
+              {profile.degree || "Researcher"}
             </div>
           </div>
 
@@ -747,10 +813,14 @@ const ArticlesSection = ({ articles, projects, profile,profileId,setProfile }) =
               <div className="pv-stat-val">{articles.length}</div>
               <div className="pv-stat-lbl">Publications</div>
             </div>
+
             <div className="pv-stat">
-              <div className="pv-stat-val">{totalCitations.toLocaleString()}</div>
+              <div className="pv-stat-val">
+                {totalCitations.toLocaleString()}
+              </div>
               <div className="pv-stat-lbl">Citations</div>
             </div>
+
             <div className="pv-stat">
               <div className="pv-stat-val">{projects.length}</div>
               <div className="pv-stat-lbl">Projects</div>
@@ -759,124 +829,136 @@ const ArticlesSection = ({ articles, projects, profile,profileId,setProfile }) =
         </div>
       </div>
 
-      {/* ── Main ── */}
       <div className="pv-main">
-
-        {/* Left column */}
         <div>
-
-          {/* Publications */}
           <div className="pv-sec-header">
             <div className="pv-sec-title">
               📄 Publications
               <span className="pv-count">{articles.length}</span>
             </div>
-            <Link to={`/profiles/${id}/articles`} className="pv-btn">+ Add Article</Link>
+
+            <Link
+              to={`/profiles/${id}/articles`}
+              className="pv-btn"
+            >
+              + Add Article
+            </Link>
+
+
+
           </div>
+
+
+
+
+
 
           {articles.length === 0 ? (
             <div className="pv-empty">
-              <div className="pv-empty-icon">📭</div>
-              <div style={{ fontWeight: 600, marginBottom: 4 }}>No publications yet</div>
-              <div style={{ fontSize: "0.8rem" }}>Add your first article to get started.</div>
+              No publications yet
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div
+              style={{
+                display:"flex",
+                flexDirection:"column",
+                gap:10
+              }}
+            >
               {articles.map((article, idx) => (
                 <div
-                  key={article.id || article.title}
+                  key={article.id}
                   className="pv-card pv-fade"
-                  style={{ animationDelay: `${idx * 0.04}s` }}
+                  style={{
+                    animationDelay:`${idx * 0.04}s`
+                  }}
                   onClick={() => handleOpenArticle(article)}
                 >
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="pv-card-title">{article.title}</div>
-                      <div className="pv-card-meta">
-                        {article.primary_location?.source?.display_name && (
-                          <span className="pv-tag">{article.primary_location.source.display_name}</span>
-                        )}
-                        {article.publication_year && (
-                          <span style={{ color: "var(--muted)", fontSize: "0.75rem", fontWeight: 600 }}>{article.publication_year}</span>
-                        )}
+                  <div
+                    style={{
+                      display:"flex",
+                      alignItems:"flex-start",
+                      gap:16
+                    }}
+                  >
+                    <div style={{ flex:1 }}>
+                      <div className="pv-card-title">
+                        {article.title}
                       </div>
+
                       <div className="pv-card-authors">
-                        {Array.isArray(article.authors) && article.authors.map((author) => (
-                          <span key={author.id}>{author.name} {author.lastName}</span>
+                        {article.authors?.map(author => (
+                          <span key={author.id}>
+                            {author.name} {author.lastName}
+                          </span>
                         ))}
                       </div>
-                      <div style={{ display: "flex", gap: 16, fontSize: "0.75rem", marginTop: 8, alignItems: "center" }}>
+
+                      <div
+                        style={{
+                          display:"flex",
+                          gap:16,
+                          marginTop:8
+                        }}
+                      >
                         {article.doi && (
-                          <a href={`https://doi.org/${article.doi}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="pv-link">
+                          <a
+                            href={`https://doi.org/${article.doi}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={(e)=>e.stopPropagation()}
+                            className="pv-link"
+                          >
                             🔗 Full Text
                           </a>
                         )}
-                        <span style={{ color: "var(--muted)" }}>Refs: {article.referenced_works_count ?? "—"}</span>
                       </div>
                     </div>
+
                     <div className="pv-cite-pill">
-                      <div className="pv-cite-pill-num">{article.cited_by_count ?? 0}</div>
-                      <div className="pv-cite-pill-lbl">cited</div>
+                      <div className="pv-cite-pill-num">
+                        {article.cited_by_count ?? 0}
+                      </div>
+                      <div className="pv-cite-pill-lbl">
+                        cited
+                      </div>
                     </div>
+
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Projects */}
-          <div className="pv-section-gap">
-            <div className="pv-sec-header">
-              <div className="pv-sec-title">
-                🗂️ Projects
-                <span className="pv-count">{projects.length}</span>
-              </div>
-              <Link to={`/profiles/${id}/projects`} className="pv-btn">+ Create Project</Link>
-            </div>
-
-            {projects.length === 0 ? (
-              <div className="pv-empty">
-                <div className="pv-empty-icon">📭</div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>No projects yet</div>
-                <div style={{ fontSize: "0.8rem" }}>Create your first project to get started.</div>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {projects.map((project, idx) => (
-                  <div
-                    key={project.id || project.title}
-                    className="pv-proj-card pv-fade"
-                    style={{ animationDelay: `${idx * 0.04}s`, cursor: "pointer" }}
-                    onClick={() => navigate(`/projects/${project.id}`)}
-                  >
-                    <div className="pv-proj-icon">🗂️</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="pv-proj-title">{project.title}</div>
-                      {project.description && <div className="pv-proj-desc">{project.description}</div>}
-                    </div>
-                    {project.status && (
-                      <span className={`pv-status ${
-                        project.status === "ACTIVE"   ? "pv-status-active" :
-                        project.status === "FINISHED" ? "pv-status-finished" : "pv-status-default"
-                      }`}>
-                        {project.status}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+            <div style={{ marginTop: 32 }}>
+                                            <div className="pv-sec-header">
+                                              <div className="pv-sec-title">
+                                                🗂️ Projects
+                                                <span className="pv-count">{projects.length}</span>
+                                              </div>
+                                              <Link to={`/profiles/${id}/projects/create`} className="pv-btn">
+                                                + Create Project
+                                              </Link>
+                                            </div>
+                                            <ProjectsSection projects={projects} profileId={id} />
+                                          </div>
         </div>
 
-        {/* Right sidebar */}
         <div>
-          <StatsCard articles={articles} projects={projects} />
-          <PublicationsChart articles={articles} />
-          <TopCollaborators articles={articles} profileName={profile.name} />
+          <StatsCard
+            articles={articles}
+            projects={projects}
+          />
+          <PublicationsChart articles={articles}/>
+          <TopCollaborators
+            articles={articles}
+            profileName={profile.name}
+          />
         </div>
+
 
       </div>
+
     </div>
   );
 };
